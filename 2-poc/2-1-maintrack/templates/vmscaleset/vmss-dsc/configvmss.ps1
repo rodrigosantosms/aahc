@@ -13,11 +13,11 @@
 #>
 Configuration configvmss
 {
-    [CmdletBinding()]
-    param 
-    ( 
-        [string]$package
-    )
+    #[CmdletBinding()]
+    #param 
+    #( 
+    #    [string]$package
+    #)
 
     Import-DscResource -ModuleName  xComputerManagement
 
@@ -51,11 +51,11 @@ Configuration configvmss
             SetScript  = {
                 $colors = @("blue","red","green")
                 $hostid = hostname
-                set-location "C:\packages\"
-                Invoke-WebRequest -Uri "$using:package" -OutFile "C:\packages\webcustomize.zip"
-                Expand-Archive -LiteralPath "C:\packages\webcustomize.zip" -DestinationPath "C:\packages"
-                move-Item "C:\packages\iisstart.htm" "C:\inetpub\wwwroot\iisstart.htm" -force
-                move-Item "C:\packages\iisstart.png" "C:\inetpub\wwwroot\iisstart.png" -force
+                #set-location "C:\packages\"
+                #Invoke-WebRequest -Uri "$using:package" -OutFile "C:\packages\webcustomize.zip"
+                #Expand-Archive -LiteralPath "C:\packages\webcustomize.zip" -DestinationPath "C:\packages"
+                move-Item "iisstart.htm" "C:\inetpub\wwwroot\iisstart.htm" -force
+                move-Item "iisstart.png" "C:\inetpub\wwwroot\iisstart.png" -force
                 $color = $colors[$hostid.Substring($hostid.Length-1,1)]
                 (Get-Content "C:\inetpub\wwwroot\iisstart.htm").replace('servername=', ('Server Name: ' + $hostid)) | Set-Content "C:\inetpub\wwwroot\iisstart.htm"
                 (Get-Content "C:\inetpub\wwwroot\iisstart.htm").replace('blue', $color) | Set-Content "C:\inetpub\wwwroot\iisstart.htm"
