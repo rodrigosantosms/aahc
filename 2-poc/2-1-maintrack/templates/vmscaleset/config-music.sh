@@ -43,5 +43,5 @@ sudo service supervisor start
 echo "5 config supervisor" /tmp/hello.txt
 
 # 6 pre-create music store database
-/usr/bin/dotnet /opt/music/MusicStore.dll &
+/usr/bin/dotnet /opt/music/MusicStore.dll
 echo "6 pre-create music store database" /tmp/hello.txt

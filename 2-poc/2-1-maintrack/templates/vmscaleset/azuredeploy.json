@@ -273,7 +273,7 @@
                       "fileUris": [
                         "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/config-music.sh"
                       ],
-                      "commandToExecute": "bash config-music.sh"
+                      "commandToExecute": "sudo sh config-music.sh"
                     }
                   }
                 }
