@@ -1,47 +1,59 @@
 #!/bin/bash
-aa="sqld4rduaaz2x23a"
+aa="pocsqlserver01"
 bb="localadmin"
 cc="P@ssw0rd0101#"
 
-# 1 install dotnet core
-echo "-------------------------------------------------------- " >> /tmp/install.log
-echo "1 install dotnet core" >> /tmp/install.log
-sudo wget https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/dotnet-install.sh /tmp/  >> /tmp/install.log
+# Phase 1 - Install dotnet core
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 1 - Install dotnet core" >> /tmp/install.log
+sudo wget -P /tmp https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/dotnet-install.sh --append-output=/tmp/install.log
 cd /tmp
-sudo ./dotnet-install.sh --channel LTS  >> /tmp/install.log
+sudo chmod +x /tmp/dotnet-install.sh
+sudo ./dotnet-install.sh  --version 1.1.0  --install-dir /opt/dotnet -Verbose >> /tmp/install.log
+sudo apt install -y libunwind8-dev >> /tmp/install.log
+export PATH=$PATH:$HOME/dotnet
 
-
-# 2 download application
-sudo wget https://raw.github.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-linux/music-app/music-store-azure-demo-pub.tar /
+# Phase 2 - Download application
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 2 - Download application" >> /tmp/install.log
+sudo wget -P /tmp https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-store-azure-demo-pub.tar --append-output=/tmp/install.log
 sudo mkdir /opt/music
-sudo tar -xf music-store-azure-demo-pub.tar -C /opt/music
-echo "2 download application" >> /tmp/install.log
+sudo tar -xf /tmp/music-store-azure-demo-pub.tar -C /opt/music
 
-# 3 install nginx, update config file
-sudo apt-get install -y nginx
-sudo service nginx start
-sudo touch /etc/nginx/sites-available/default
-sudo wget https://raw.githubusercontent.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-linux/music-app/nginx-config/default -O /etc/nginx/sites-available/default
-sudo cp /opt/music/nginx-config/default /etc/nginx/sites-available/
-sudo nginx -s reload
-echo "3 install nginx, update config file" >> /tmp/install.log
+tar -czvf music-store-azure-demo-pub.tar c:/temp/music-store-azure-demo-pub
+
+# Phase 3 - Install nginx, update config file
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 3 - Install nginx, update config file" >> /tmp/install.log
+sudo apt-get install -y nginx >> /tmp/install.log
+sudo service nginx start >> /tmp/install.log
+sudo touch /etc/nginx/sites-available/default >> /tmp/install.log
+sudo cp /etc/nginx/sites-available/default /tmp/bkp_nginx_sites-available_default >> /tmp/install.log
+sudo wget -P /tmp https://raw.githubusercontent.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-linux/music-app/nginx-config/default --append-output=/tmp/install.log
+sudo mkdir /opt/music/nginx-config >> /tmp/install.log
+sudo cp /tmp/default /opt/music/nginx-config/default >> /tmp/install.log
+sudo cp /tmp/default /etc/nginx/sites-available/default >> /tmp/install.log
+sudo nginx -s reload >> /tmp/install.log
 
 # 4 update and secure music config file
-sed -i "s/<replaceserver>/$aa/g" /opt/music/config.json
-sed -i "s/<replaceuser>/$bb/g" /opt/music/config.json
-sed -i "s/<replacepass>/$cc/g" /opt/music/config.json
-sudo chown $bb /opt/music/config.json
-sudo chmod 0400 /opt/music/config.json
-echo "4 update and secure music config file" >> /tmp/install.log
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 4 - Update and secure music config file" >> /tmp/install.log
+sudo sed -i "s/<replaceserver>/$aa/g" /opt/music/config.json >> /tmp/install.log
+sudo sed -i "s/<replaceuser>/$bb/g" /opt/music/config.json >> /tmp/install.log
+sudo sed -i "s/<replacepass>/$cc/g" /opt/music/config.json >> /tmp/install.log
+sudo chown $bb /opt/music/config.json >> /tmp/install.log
+sudo chmod 0400 /opt/music/config.json >> /tmp/install.log
 
 # 5 config supervisor
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 5 - Config supervisor" >> /tmp/install.log
 sudo apt-get install -y supervisor
-sudo touch /etc/supervisor/conf.d/music.conf
-sudo wget https://raw.githubusercontent.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-linux/music-app/supervisor/music.conf -O /etc/supervisor/conf.d/music.conf
-sudo service supervisor stop
-sudo service supervisor start
-echo "5 config supervisor" >> /tmp/install.log
+sudo touch /etc/supervisor/conf.d/music.conf >> /tmp/install.log
+sudo wget -P /etc/supervisor/conf.d/music.conf https://raw.githubusercontent.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-linux/music-app/supervisor/music.conf --append-output=/tmp/install.log
+sudo service supervisor stop >> /tmp/install.log
+sudo service supervisor start >> /tmp/install.log
 
 # 6 pre-create music store database
-/usr/bin/dotnet /opt/music/MusicStore.dll &
-echo "6 pre-create music store database" >> /tmp/install.log
+echo "--------------------------------------------------------" >> /tmp/install.log
+echo "Phase 6 - Pre-create music store database" >> /tmp/install.log
+dotnet /opt/music/MusicStore.dll &
