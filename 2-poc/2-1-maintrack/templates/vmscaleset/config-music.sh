@@ -20,8 +20,6 @@ sudo wget -P /tmp https://raw.githubusercontent.com/rodrigosantosms/aahc/master/
 sudo mkdir /opt/music
 sudo tar -xf /tmp/music-store-azure-demo-pub.tar -C /opt/music
 
-tar -czvf music-store-azure-demo-pub.tar c:/temp/music-store-azure-demo-pub
-
 # Phase 3 - Install nginx, update config file
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 3 - Install nginx, update config file" >> /tmp/install.log
