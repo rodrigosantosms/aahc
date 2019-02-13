@@ -7,14 +7,13 @@ cc="P@ssw0rd0101#"
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 1 - Install dotnet core" >> /tmp/install.log
 cd /tmp
+wget  https://download.visualstudio.microsoft.com/download/pr/bf80af6a-4d6f-42c0-963b-4b121168617a/b47616e8578d4add910c6f8a612ae2b3/dotnet-dev-ubuntu-x64.1.1.12.tar.gz
+sudo mkdir /opt/dotnet
+sudo tar zxf dotnet-dev-ubuntu-x64.1.1.12.tar.gz -C /opt/dotnet
 sudo echo "deb http://security.ubuntu.com/ubuntu trusty-security main" >> /etc/apt/sources.list
-sudo apt-get update && sudo apt-get install -y libicu52 liblldb-3.6 >> /tmp/install.log
-wget  https://download.microsoft.com/download/A/F/6/AF610E6A-1D2D-47D8-80B8-F178951A0C72/Binaries/dotnet-dev-ubuntu-x64.1.0.0-preview2-1-003177.tar.gz
-sudo tar zxf dotnet-dev-ubuntu-x64.1.0.0-preview2-1-003177.tar.gz -C /opt/dotnet
 sudo apt install -y libunwind8-dev >> /tmp/install.log
-sudo wget -P /tmp https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/dotnet-install.sh --append-output=/tmp/install.log
-sudo chmod +x /tmp/dotnet-install.sh
-sudo ./dotnet-install.sh  --version 1.1.0  --install-dir /opt/dotnet -Verbose >> /tmp/install.log
+sudo apt-get update && sudo apt-get install -y libicu52 liblldb-3.6 >> /tmp/install.log
+dotnet --version  >> /tmp/install.log
 export PATH=$PATH:/opt/dotnet
 
 # Phase 2 - Download application
