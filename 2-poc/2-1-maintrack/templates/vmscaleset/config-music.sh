@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo su
 aa="pocsqlserver01"
 bb="localadmin"
 cc="P@ssw0rd0101#"
