@@ -7,7 +7,7 @@ cc="P@ssw0rd0101#"
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 1 - Install dotnet core" >> /tmp/install.log
 cd /tmp
-wget https://download.visualstudio.microsoft.com/download/pr/c0957a2b-cac6-44d8-b1cc-0dad4420c825/8dc69e33f8cf44152fdf173d3bf0b746/dotnet-dev-ubuntu-x64.1.1.11.tar.gz
+sudo wget -P /tmp https://download.visualstudio.microsoft.com/download/pr/c0957a2b-cac6-44d8-b1cc-0dad4420c825/8dc69e33f8cf44152fdf173d3bf0b746/dotnet-dev-ubuntu-x64.1.1.11.tar.gz  --append-output=/tmp/install.log
 sudo mkdir /opt/dotnet
 export PATH=$PATH:/opt/dotnet
 sudo tar zxf dotnet-dev-ubuntu-x64.1.1.11.tar.gz -C /opt/dotnet
@@ -15,9 +15,9 @@ sudo apt-key adv --keyserver packages.microsoft.com --recv-keys EB3E94ADBE1229CF
 sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list'
 sudo apt-get update
-sudo apt-get install apt-transport-https
+sudo apt-get install apt-transport-https >> /tmp/install.log
 sudo apt-get update && sudo apt-get install -y libicu52 libcurl3 liblldb-3.6 libunwind8-dev >> /tmp/install.log
-sudo apt-get install dotnet-dev-1.1.11
+sudo apt-get install dotnet-dev-1.1.11 >> /tmp/install.log
 dotnet --version  >> /tmp/install.log
 
 # Phase 2 - Download application
