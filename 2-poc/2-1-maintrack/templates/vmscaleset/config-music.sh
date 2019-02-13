@@ -61,4 +61,6 @@ sudo service supervisor start >> /tmp/install.log
 # 6 pre-create music store database
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 6 - Pre-create music store database" >> /tmp/install.log
-/opt/dotnet/dotnet /opt/music/MusicStore.dll &
+dotnet --version >> /tmp/dotnetversion.log
+dotnet /opt/music/MusicStore.dll &
+dotnet /opt/music/MusicStore.dll &
