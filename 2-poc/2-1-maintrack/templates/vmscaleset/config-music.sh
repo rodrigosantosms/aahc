@@ -58,9 +58,11 @@ sudo wget -P /etc/supervisor/conf.d/music.conf https://raw.githubusercontent.com
 sudo service supervisor stop >> /tmp/install.log
 sudo service supervisor start >> /tmp/install.log
 
-# 6 pre-create music store database
+# 6 pre-create music store database and Start the App
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 6 - Pre-create music store database" >> /tmp/install.log
 dotnet --version >> /tmp/dotnetversion.log
-dotnet /opt/music/MusicStore.dll &
-dotnet /opt/music/MusicStore.dll &
+sudo -P wget /etc/init.d/musicstore https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/musicstorestopstart.sh --append-output=/tmp/install.log
+sudo chmod a+x /etc/init.d/musicstore
+sudo update rc.d musicstore defaults
+sudo /etc/init.d/musicstore start
