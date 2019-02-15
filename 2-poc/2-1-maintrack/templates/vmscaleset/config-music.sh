@@ -62,7 +62,7 @@ sudo service supervisor start >> /tmp/install.log
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 6 - Pre-create music store database" >> /tmp/install.log
 dotnet --version >> /tmp/dotnetversion.log
-sudo -P wget /etc/init.d/musicstore https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/musicstorestopstart.sh --append-output=/tmp/install.log
-sudo chmod a+x /etc/init.d/musicstore
-sudo update rc.d musicstore defaults
-sudo /etc/init.d/musicstore start
+sudo wget -P /etc/init.d/musicstorestopstart.sh https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/musicstorestopstart.sh --append-output=/tmp/install.log
+sudo chmod a+x /etc/init.d/musicstorestopstart.sh
+sudo update-rc.d musicstorestopstart.sh defaults
+sudo /etc/init.d/musicstorestopstart.sh start
