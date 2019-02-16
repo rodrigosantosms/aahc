@@ -1,287 +1,303 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "adminUsername": {
-        "type": "string",
-        "metadata": {
-          "description": "Admin username on all VMs."
-        }
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmssName": {
+      "type": "string",
+      "defaultValue": "web-vmss",
+      "metadata": {
+        "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
       },
-      "adminPassword": {
-        "type": "securestring",
-        "metadata": {
-          "description": "Admin password on all VMs."
+      "maxLength": 61
+    },
+    "instanceCount": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of VM instances (10 or less)."
+      },
+      "defaultValue": 2,
+      "maxValue": 10
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1_v2",
+      "metadata": {
+        "description": "Size of VMs in the VM Scale Set."
+      }
+    },
+    "AzureSqlServerName": {
+      "type": "string",
+      "defaultValue": "pocwebvmsssql001",
+      "metadata": {
+        "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
+      },
+      "maxLength": 61
+    },
+    "WebSiteDnsName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing subnet to deploy the scale set into."
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin username on all VMs and Azure SQL Server."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password on all VMs and Azure SQL Server."
+      }
+    },
+    "existingVnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "vName of the existing virtual network to deploy the scale set into."
+      }
+    },
+    "existingSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing subnet to deploy the scale set into."
+      }
+    }
+  },
+  "variables": {
+    "nicName": "[concat(parameters('vmssName'), '-nic')]",
+    "ipConfigName": "[concat(parameters('vmssName'), '-ipconfig')]",
+    "publicIPAddressName": "[concat(parameters('vmssName'), 'lb-pip')]",
+    "loadBalancerName": "[concat(parameters('vmssName'), '-lb')]",
+    "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
+    "lbID": "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]",
+    "natPoolName": "[concat(parameters('vmssName'), '-natpool')]",
+    "bePoolName": "[concat(parameters('vmssName'), '-bepool')]",
+    "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/',variables('bePoolName'))]",
+    "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
+    "frontEndIPConfigID": "[concat(variables('lbID'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
+    "location": "[resourceGroup().location]",
+    "osType": {
+      "publisher": "Canonical",
+      "offer": "UbuntuServer",
+      "sku": "18.04-LTS",
+      "version": "latest"
+    },
+    "imageReference": "[variables('osType')]",
+    "computeApiVersion": "2017-12-01",
+    "networkApiVersion": "2017-10-01"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('WebSiteDnsName')]"
         }
       }
     },
-    "variables": {
-      "vmssName": "web-vmss",
-      "instanceCount": "1",
-      "vmSize": "Standard_DS2_v2_Promo",
-      "virtualNetworkName": "[concat(variables('vmssName'), '-vnet')]",
-      "subnetName": "[concat(variables('vmssName'), '-subnet')]",
-      "nicName": "[concat(variables('vmssName'), '-nic')]",
-      "ipConfigName": "[concat(variables('vmssName'), '-ipconfig')]",
-      "addressPrefix": "192.168.100.0/24",
-      "subnetPrefix": "192.168.100.0/24",
-      "publicIPAddressName": "[concat(variables('vmssName'), '-pip')]",
-      "networkSecurityGroupName": "[concat(variables('vmssName'), '-nsg')]",
-      "loadBalancerName": "[concat(variables('vmssName'), '-lb')]",
-      "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-      "lbID": "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]",
-      "natPoolName": "[concat(variables('vmssName'), '-natpool')]",
-      "bePoolName": "[concat(variables('vmssName'), '-bepool')]",
-      "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/',variables('bePoolName'))]",
-      "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
-      "frontEndIPConfigID": "[concat(variables('lbID'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
-      "location": "[resourceGroup().location]",
-      "osType": {
-        "publisher": "Canonical",
-        "offer": "UbuntuServer",
-        "sku": "18.04-LTS",
-        "version": "latest"
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "name": "[variables('loadBalancerName')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Basic"
       },
-      "imageReference": "[variables('osType')]",
-      "computeApiVersion": "2017-12-01",
-      "networkApiVersion": "2017-10-01"
-    },
-    "resources": [
-      {
-        "type": "Microsoft.Network/networkSecurityGroups",
-        "apiVersion": "[variables('networkApiVersion')]",
-        "name": "[variables('networkSecurityGroupName')]",
-        "location": "[variables('location')]",
-        "properties": {
-            "securityRules": [
-                {
-                    "name": "allowSSH",
-                    "properties": {
-                        "description": "Allow SSH traffic",
-                        "protocol": "Tcp",
-                        "sourcePortRange": "*",
-                        "destinationPortRange": "22",
-                        "sourceAddressPrefix": "*",
-                        "destinationAddressPrefix": "*",
-                        "access": "Allow",
-                        "priority": 1000,
-                        "direction": "Inbound"
-                    }
-                },
-                {
-                    "name": "allowHTTP",
-                    "properties": {
-                        "description": "Allow web traffic",
-                        "protocol": "Tcp",
-                        "sourcePortRange": "*",
-                        "destinationPortRange": "80",
-                        "sourceAddressPrefix": "*",
-                        "destinationAddressPrefix": "*",
-                        "access": "Allow",
-                        "priority": 1001,
-                        "direction": "Inbound"
-                    }
-                }
-            ]
-        }
-      },
-      {
-        "type": "Microsoft.Network/virtualNetworks",
-        "name": "[variables('virtualNetworkName')]",
-        "dependsOn": [
-          "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
-        ],
-        "location": "[variables('location')]",
-        "apiVersion": "[variables('networkApiVersion')]",
-        "properties": {
-          "addressSpace": {
-            "addressPrefixes": [
-              "[variables('addressPrefix')]"
-            ]
-          },
-          "subnets": [
-            {
-              "name": "[variables('subnetName')]",
-              "properties": {
-                "addressPrefix": "[variables('subnetPrefix')]",
-                "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-                }
+      "dependsOn": [
+        "[variables('publicIPAddressName')]"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "LoadBalancerFrontEnd",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[variables('publicIPAddressID')]"
               }
             }
-          ]
-        }
-      },
-      {
-        "type": "Microsoft.Network/publicIPAddresses",
-        "apiVersion": "[variables('networkApiVersion')]",
-        "name": "[variables('publicIPAddressName')]",
-        "location": "[variables('location')]",
-        "sku": {
-            "name": "Basic"
-        },
-        "properties": {
-            "publicIPAllocationMethod": "Dynamic"
-        }
-      },
-      {
-        "type": "Microsoft.Network/loadBalancers",
-        "apiVersion": "[variables('networkApiVersion')]",
-        "name": "[variables('loadBalancerName')]",
-        "location": "[variables('location')]",
-        "sku": {
-            "name": "Basic"
-        },
-        "dependsOn": [
-            "[variables('publicIPAddressName')]"
+          }
         ],
-        "properties": {
-            "frontendIPConfigurations": [
-                {
-                    "name": "LoadBalancerFrontEnd",
-                    "properties": {
-                        "publicIPAddress": {
-                            "id": "[variables('publicIPAddressID')]"
-                        }
-                    }
-                }
-            ],
-            "backendAddressPools": [
-                {
-                    "name": "[variables('bePoolName')]"
-                }
-            ],
-            "probes": [
-              {
-                "name": "tcpProbe",
-                "properties": {
-                  "protocol": "tcp",
-                  "port": 80,
-                  "intervalInSeconds": 5,
-                  "numberOfProbes": 2
-                }
-              }
-            ],
-            "loadBalancingRules": [
-              {
-                "name": "LBRule",
-                "properties": {
-                  "frontendIPConfiguration": {
-                    "id": "[variables('frontEndIPConfigID')]"
-                  },
-                  "backendAddressPool": {
-                    "id": "[variables('lbPoolID')]"
-                  },
-                  "protocol": "tcp",
-                  "frontendPort": 80,
-                  "backendPort": 80,
-                  "enableFloatingIP": false,
-                  "idleTimeoutInMinutes": 5,
-                  "probe": {
-                    "id": "[variables('lbProbeID')]"
-                  }
-                }
-              }
-            ],
-            "inboundNatPools": [
-                {
-                    "name": "[variables('natPoolName')]",
-                    "properties": {
-                        "frontendIPConfiguration": {
-                            "id": "[variables('frontEndIPConfigID')]"
-                        },
-                        "protocol": "tcp",
-                        "frontendPortRangeStart": "50000",
-                        "frontendPortRangeEnd": "50100",
-                        "backendPort": "22"
-                    }
-                }
-            ]
-        }
-      },
-      {
-        "type": "Microsoft.Compute/virtualMachineScaleSets",
-        "name": "[variables('vmssName')]",
-        "location": "[variables('location')]",
-        "apiVersion": "[variables('computeApiVersion')]",
-        "dependsOn": [
-          "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-          "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
+        "backendAddressPools": [
+          {
+            "name": "[variables('bePoolName')]"
+          }
         ],
-        "sku": {
-          "name": "[variables('vmSize')]",
-          "tier": "Standard",
-          "capacity": "[variables('instanceCount')]"
-        },
-        "properties": {
-          "upgradePolicy": {
-            "mode": "Automatic"
-          },
-          "virtualMachineProfile": {
-            "storageProfile": {
-              "osDisk": {
-                "caching": "ReadOnly",
-                "createOption": "FromImage"
+        "probes": [
+          {
+            "name": "tcpProbe",
+            "properties": {
+              "protocol": "tcp",
+              "port": 80,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "name": "LBRule",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
               },
-              "imageReference": "[variables('imageReference')]"
-            },
-            "osProfile": {
-              "computerNamePrefix": "[variables('vmssName')]",
-              "adminUsername": "[parameters('adminUsername')]",
-              "adminPassword": "[parameters('adminPassword')]"
-            },
-            "networkProfile": {
-              "networkInterfaceConfigurations": [
-                {
-                  "name": "[variables('nicName')]",
-                  "properties": {
-                    "primary": "true",
-                    "ipConfigurations": [
-                      {
-                        "name": "[variables('ipConfigName')]",
-                        "properties": {
-                          "subnet": {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
-                          },
-                          "loadBalancerBackendAddressPools": [
-                            {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), variables('bePoolName'))]"
-                            }
-                          ],
-                          "loadBalancerInboundNatPools": [
-                              {
-                                  "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools/', variables('loadBalancerName'), variables('natPoolName'))]"
-                              }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            "extensionProfile": {
-              "extensions": [
-                {
-                  "name": "AppInstall",
-                  "properties": {
-                    "publisher": "Microsoft.Azure.Extensions",
-                    "type": "CustomScript",
-                    "typeHandlerVersion": "2.0",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                      "fileUris": [
-                        "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/config-music.sh"
-                      ],
-                      "commandToExecute": "sudo sh config-music.sh"
-                    }
-                  }
-                }
-              ]
+              "backendAddressPool": {
+                "id": "[variables('lbPoolID')]"
+              },
+              "protocol": "tcp",
+              "frontendPort": 80,
+              "backendPort": 80,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 5,
+              "probe": {
+                "id": "[variables('lbProbeID')]"
+              }
             }
-          },
-          "overprovision": "true"
-        }
+          }
+        ],
+        "inboundNatPools": [
+          {
+            "name": "[variables('natPoolName')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": "50000",
+              "frontendPortRangeEnd": "50100",
+              "backendPort": "22"
+            }
+          }
+        ]
       }
-    ]
+    },
+    {
+      "apiVersion": "2014-04-01-preview",
+      "type": "Microsoft.Sql/servers",
+      "name": "[parameters('AzureSqlServerName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "sql-music-store"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('adminUsername')]",
+        "administratorLoginPassword": "[parameters('AdminPassword')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2014-04-01-preview",
+          "type": "firewallrules",
+          "name": "firewall-allow-azure",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', parameters('AzureSqlServerName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "name": "[parameters('vmssName')]",
+      "location": "[variables('location')]",
+      "apiVersion": "[variables('computeApiVersion')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
+        "[concat('Microsoft.Sql/servers/', parameters('AzureSqlServerName'))]"
+      ],
+      "sku": {
+        "name": "[parameters('vmSize')]",
+        "tier": "Standard",
+        "capacity": "[parameters('instanceCount')]"
+      },
+      "properties": {
+        "upgradePolicy": {
+          "mode": "Automatic"
+        },
+        "virtualMachineProfile": {
+          "storageProfile": {
+            "osDisk": {
+              "caching": "ReadOnly",
+              "createOption": "FromImage"
+            },
+            "imageReference": "[variables('imageReference')]"
+          },
+          "osProfile": {
+            "computerNamePrefix": "[parameters('vmssName')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+          },
+          "networkProfile": {
+            "networkInterfaceConfigurations": [
+              {
+                "name": "[variables('nicName')]",
+                "properties": {
+                  "primary": "true",
+                  "ipConfigurations": [
+                    {
+                      "name": "[variables('ipConfigName')]",
+                      "properties": {
+                        "subnet": {
+                          "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubNetName'))]"
+                        },
+                        "loadBalancerBackendAddressPools": [
+                          {
+                            "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), variables('bePoolName'))]"
+                          }
+                        ],
+                        "loadBalancerInboundNatPools": [
+                          {
+                            "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools/', variables('loadBalancerName'), variables('natPoolName'))]"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "extensionProfile": {
+            "extensions": [
+              {
+                "name": "AppInstall",
+                "properties": {
+                  "publisher": "Microsoft.Azure.Extensions",
+                  "type": "CustomScript",
+                  "typeHandlerVersion": "2.0",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "fileUris": [
+                      "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/scripts/config-music.sh"
+                    ]
+                  },
+                  "protectedSettings": {
+                    "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('AdminPassword'))]"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "overprovision": "true"
+      }
+    }
+  ],
+  "outputs": {
+    "fqdn": {
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpAddressName')),providers('Microsoft.Network', 'publicIPAddresses').apiVersions[0]).dnsSettings.fqdn]",
+      "type": "string"
+    }
   }
+}
