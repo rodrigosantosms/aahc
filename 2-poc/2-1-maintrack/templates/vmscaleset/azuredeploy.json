@@ -117,8 +117,6 @@
                         "reference": {
                             "keyVault": {
                                 "id": "[resourceId(subscription().subscriptionId,  parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                                /subscriptions/d5df961d-88c6-4360-b13b-7b2d06f04f07/resourceGroups/poc-hub-rg/providers/Microsoft.KeyVault/vaults/aahckv
                             },
                             "secretName": "[parameters('mySecret')]"
                         }
