@@ -20,7 +20,7 @@ dotnet --version  >> /tmp/install.log
 # Phase 2 - Download application
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 2 - Download application" >> /tmp/install.log
-sudo wget -O /tmp/music-store-azure-demo-pub.tar.gz https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-store-azure-demo-pub.tar.gz --append-output=/tmp/install.log
+sudo wget -O /tmp/music-store-azure-demo-pub.tar.gz https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-app/music-store-azure-demo-pub.tar.gz --append-output=/tmp/install.log
 sudo tar -xzvf /tmp/music-store-azure-demo-pub.tar.gz -C /opt
 
 # Phase 3 - Install nginx, update config file
