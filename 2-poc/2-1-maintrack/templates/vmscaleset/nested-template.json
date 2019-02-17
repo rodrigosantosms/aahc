@@ -283,7 +283,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('AdminPassword'))]"
+                                        "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'))]"
                                     }
                                 }
                             }
