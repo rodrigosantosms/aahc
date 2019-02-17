@@ -21,9 +21,10 @@ dotnet --version  >> /tmp/install.log
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 2 - Download application" >> /tmp/install.log
 sudo wget -O /tmp/music-store-azure-demo-pub.tar.gz https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-app/music-store-azure-demo-pub.tar.gz --append-output=/tmp/install.log
+sleep 30
 sudo tar -xzvf /tmp/music-store-azure-demo-pub.tar.gz -C /opt
 
-# Phase 3 - Install nginx, update config file
+# Phase 3 - Install nginx, update config filels -l /
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 3 - Install nginx, update config file" >> /tmp/install.log
 sudo apt-get install -y nginx >> /tmp/install.log
@@ -42,7 +43,7 @@ echo "Phase 4 - Update and secure music config file" >> /tmp/install.log
 sudo sed -i "s/<replaceserver>/$1/g" /opt/music/config.json >> /tmp/install.log
 sudo sed -i "s/<replaceuser>/$2/g" /opt/music/config.json >> /tmp/install.log
 sudo sed -i "s/<replacepass>/$3/g" /opt/music/config.json >> /tmp/install.log
-sudo chown $bb /opt/music/config.json
+sudo chown $2 /opt/music/config.json
 sudo chmod 0400 /opt/music/config.json
 
 # 5 config supervisor
