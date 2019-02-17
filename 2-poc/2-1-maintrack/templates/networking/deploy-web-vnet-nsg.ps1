@@ -38,8 +38,8 @@ Param(
     [string] $WebRgName = 'poc-web-rg',
     [string] $WebRgLocation = 'WestUS2',
     [switch] $UploadArtifacts,
-    [string] $WebVNetTemplate = 'C:\Azure\aahc\2-poc\2-1-maintrack\templates\network\web-west2-vnet-nsg.json',
-    [string] $WebVNetTemplateParameters = 'C:\Azure\aahc\2-poc\2-1-maintrack\templates\network\web-west2-vnet-nsg-parameters.json',
+    [string] $WebVNetTemplate = 'C:\Azure\aahc\2-poc\2-1-maintrack\templates\networking\web-vnet-nsg.json',
+    [string] $WebVNetTemplateParameters = 'C:\Azure\aahc\2-poc\2-1-maintrack\templates\networking\web-vnet-nsg-parameters.json',
     [string] $ArtifactStagingDirectory = '.',
     [string] [string] $DeploymentName = 'Deploy-' + (((Get-Date).ToUniversalTime()).ToString('MMddyyyy-HHmm')),
     [switch] $ValidateOnly
