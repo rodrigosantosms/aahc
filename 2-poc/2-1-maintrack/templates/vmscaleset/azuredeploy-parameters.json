@@ -3,76 +3,37 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vmssName": {
-            "value": "web-vmss",
-            "metadata": {
-                "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
-            }
+            "value": "web-vmss"
         },
         "instanceCount": {
-            "value": 2,
-            "metadata": {
-                "description": "Number of VM instances (10 or less)."
-            }
+            "value": 2
         },
         "vmSize": {
-            "value": "Standard_D1_v2",
-            "metadata": {
-                "description": "Size of VMs in the VM Scale Set."
-            }
+            "value": "Standard_D1_v2"
         },
         "AzureSqlServerName": {
-            "value": "pocwebvmsssql001",
-            "metadata": {
-                "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
-            }
+            "value": "pocwebvmsssql001"
         },
         "WebSiteDnsName": {
-            "value": "aahcwebvmss001",
-            "metadata": {
-                "description": "Name of the existing subnet to deploy the scale set into."
-            }
+            "value": "aahcwebvmss001"
         },
         "existingVnetName": {
-            "value": "web-west2-vnet",
-            "metadata": {
-                "description": "vName of the existing virtual network to deploy the scale set into."
-            }
+            "value": "web-west2-vnet"
         },
         "existingSubnetName": {
-            "value": "web-sn",
-            "metadata": {
-                "description": "Name of the existing subnet to deploy the scale set into."
-            }
+            "value": "web-sn"
         },
         "adminUsername": {
-            "value": "localadmin",
-            "metadata": {
-                "description": "Admin username on all VMs and Azure SQL Server."
-            }
+            "value": "localadmin"
         },
-        "KeyvaultName": {
-            "value": "aahckv",
-            "metadata": {
-                "description": "Keyvault storing the password for the localadmin."
-            }
-        },
-        "vaultSubscription": {
-            "value": "d5df961d-88c6-4360-b13b-7b2d06f04f07",
-            "metadata": {
-                "description": "SubscriptionID from the Subscription hosting the Keyvault"
-            }
+        "vaultName": {
+            "value": "aahckv"
         },
         "vaultResourceGroupName": {
-            "value": "poc-hub-rg",
-            "metadata": {
-                "description": "Resource Group hosting the Keyvault"
-            }
+            "value": "poc-hub-rg"
         },
         "mySecret": {
-            "value": "adminPassword",
-            "metadata": {
-                "description": "Secret storing the password for the localadmin."
-            }
+            "value": "adminPassword"
         }
     }
 }
