@@ -29,7 +29,7 @@ az account set --subscription "SubscriptionName or SubscriptionID"
 ##### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer. You will need to open and change the values for the parameters in the azuredeploy-parameters.json file
 
 ```bash
-az group deployment create --resource-group poc-hub-rg --template-file azuredeploy.json \
+az group deployment create --resource-group poc-web-rg --template-file azuredeploy.json \
 --parameters @azuredeploy-parameters.json
 ```
 
@@ -61,14 +61,7 @@ adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySe
 
 <br>
 
-Once that completed, the application can be access on the Azure public IP address or or public DNS name.
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/azuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/azuredeploy.json" target="_blank">
-<img src="http://armviz.io/visualizebutton.png"/>
-</a>
+Once completed, the application can be access on the Azure public IP address or public DNS name.
 
 The application architecture is similar to this:
 
