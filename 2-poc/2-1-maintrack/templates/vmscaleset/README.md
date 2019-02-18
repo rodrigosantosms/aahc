@@ -8,30 +8,46 @@ Before deploying this template, you need to deploy the previous sections of this
 
 After completing the pre-requisites, execute the following steps:
 
-#### To start, create a connection with Azure
+#### Step 1: To start, create a connection with Azure
 
+```bash
 az login
+```
 
-#### If you have access to multiple Subscriptions, set the subscription you want to use
+<br>
 
+#### Step 2: If you have access to multiple Subscriptions, set the subscription you want to use
+
+```bash
 az account set --subscription "SubscriptionName or SubscriptionID"
+```
 
-#### There options to deploy the template
+<br>
 
-#### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer, then open and change the parameters in the file azuredeploy-parameters.json
+#### Step 3: There are three options to deploy the template
 
+##### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer, then open and change the parameters in the file azuredeploy-parameters.json
+
+```bash
 az group deployment create --resource-group poc-hub-rg --template-file kv.json --parameters @kv-parameters.json
+```
 
-#### Option 2 - Remotely: Use this option if you want to use the online templates passing inline all the required parameters All parameters below are REQUIRED
+<br>
 
+##### Option 2 - Remotely: Use this option if you want to use the online templates passing inline all the required parameters All parameters below are REQUIRED
+
+```shell
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/azuredeploy.json \
 --parameters vmssName=web-vmss instanceCount=2 vmSize=Standard_D1_v2 \
 AzureSqlServerName=pocwebvmsssql001 WebSiteDnsName=aahcwebvmss001 \
 existingVnetName=web-west2-vnet existingSubnetName=web-sn \
 adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySecret=adminPassword
+```
 
-#### Option 3 - Cloud Shell: Use this option if you prefer to download the files azuredeploy.json and azuredeploy-parameters.json to your CloudShell Storage Account. First you will need to download to your localcomputer, then using Azure Storage Explorer, you will need to copy to the StorageAccount
+<br>
+
+##### Option 3 - Cloud Shell: Use this option if you prefer to download the files azuredeploy.json and azuredeploy-parameters.json to your CloudShell Storage Account. First you will need to download to your localcomputer, then using Azure Storage Explorer, you will need to copy to the StorageAccount
 
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://StorageAccountName.blob.core.windows.net/BlobContainerName/azuredeploy.json \
@@ -39,6 +55,8 @@ az group deployment create --resource-group poc-web-rg \
 AzureSqlServerName=pocwebvmsssql001 WebSiteDnsName=aahcwebvmss001 \
 existingVnetName=web-west2-vnet existingSubnetName=web-sn \
 adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySecret=adminPassword
+
+<br>
 
 Once that completed, the application can be access on the Azure public IP address or or public DNS name.
 
