@@ -29,7 +29,8 @@ az account set --subscription "SubscriptionName or SubscriptionID"
 ##### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer. You will need to open and change the values for the parameters in the azuredeploy-parameters.json file
 
 ```bash
-az group deployment create --resource-group poc-hub-rg --template-file azuredeploy.json --parameters @azuredeploy-parameters.json
+az group deployment create --resource-group poc-hub-rg --template-file azuredeploy.json \
+--parameters @azuredeploy-parameters.json
 ```
 
 <br>
@@ -49,12 +50,14 @@ adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySe
 
 ##### Option 3 - Cloud Shell: Use this option if you prefer your CloudShell Storage Account. First you will need to download the file azuredeploy.json to your local computer, then using Azure Storage Explorer, Upload it to your CloudShell StorageAccount
 
+```bash
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://StorageAccountName.blob.core.windows.net/BlobContainerName/azuredeploy.json \
 --parameters vmssName=web-vmss instanceCount=2 vmSize=Standard_D1_v2 \
 AzureSqlServerName=pocwebvmsssql001 WebSiteDnsName=aahcwebvmss001 \
 existingVnetName=web-west2-vnet existingSubnetName=web-sn \
 adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySecret=adminPassword
+```
 
 <br>
 
