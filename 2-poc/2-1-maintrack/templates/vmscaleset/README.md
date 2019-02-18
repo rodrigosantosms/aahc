@@ -26,17 +26,17 @@ az account set --subscription "SubscriptionName or SubscriptionID"
 
 #### Step 3: There are three options to deploy the template
 
-##### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer, then open and change the parameters in the file azuredeploy-parameters.json
+##### Option 1 - Local Computer: Use this option if you want to download the files azuredeploy.json and azuredeploy-parameters.json to your local computer. You will need to open and change the values for the parameters in the azuredeploy-parameters.json file
 
 ```bash
-az group deployment create --resource-group poc-hub-rg --template-file kv.json --parameters @kv-parameters.json
+az group deployment create --resource-group poc-hub-rg --template-file azuredeploy.json --parameters @azuredeploy-parameters.json
 ```
 
 <br>
 
-##### Option 2 - Remotely: Use this option if you want to use the online templates passing inline all the required parameters All parameters below are REQUIRED
+##### Option 2 - Remote: Use this option if you want to use the online templates passing all the required parameters inline. All parameters below are REQUIRED
 
-```shell
+```bash
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/azuredeploy.json \
 --parameters vmssName=web-vmss instanceCount=2 vmSize=Standard_D1_v2 \
@@ -47,7 +47,7 @@ adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySe
 
 <br>
 
-##### Option 3 - Cloud Shell: Use this option if you prefer to download the files azuredeploy.json and azuredeploy-parameters.json to your CloudShell Storage Account. First you will need to download to your localcomputer, then using Azure Storage Explorer, you will need to copy to the StorageAccount
+##### Option 3 - Cloud Shell: Use this option if you prefer your CloudShell Storage Account. First you will need to download the file azuredeploy.json to your local computer, then using Azure Storage Explorer, Upload it to your CloudShell StorageAccount
 
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://StorageAccountName.blob.core.windows.net/BlobContainerName/azuredeploy.json \
