@@ -4,7 +4,7 @@
     "parameters": {
         "vmssName": {
             "type": "string",
-            "defaultValue": "web-vmss",
+            "defaultValue": "webw2vmss1",
             "metadata": {
                 "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
             },
@@ -27,7 +27,6 @@
         },
         "AzureSqlServerName": {
             "type": "string",
-            "defaultValue": "pocwebvmsssql001",
             "metadata": {
                 "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
             },

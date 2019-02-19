@@ -4,7 +4,7 @@
     "parameters": {
         "vmssName": {
             "type": "string",
-            "defaultValue": "web-vmss",
+            "defaultValue": "webw2azvmss1",
             "metadata": {
                 "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
             },
@@ -15,7 +15,7 @@
             "metadata": {
                 "description": "Number of VM instances (10 or less)."
             },
-            "defaultValue": 2,
+            "defaultValue": 3,
             "maxValue": 10
         },
         "vmSize": {
@@ -27,7 +27,6 @@
         },
         "AzureSqlServerName": {
             "type": "string",
-            "defaultValue": "pocwebvmsssql001",
             "metadata": {
                 "description": "Unique name for the scale set. Must be 3-61 characters in length and unique across the VNet."
             },
@@ -171,7 +170,7 @@
                             },
                             "protocol": "tcp",
                             "frontendPortRangeStart": "50000",
-                            "frontendPortRangeEnd": "50100",
+                            "frontendPortRangeEnd": "50010",
                             "backendPort": "22"
                         }
                     }
@@ -277,13 +276,12 @@
                                     "type": "CustomScript",
                                     "typeHandlerVersion": "2.0",
                                     "autoUpgradeMinorVersion": true,
-                                    "settings": {
+                                    "settings": {},
+                                    "protectedSettings": {
+                                        "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'))]",
                                         "fileUris": [
                                             "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/scripts/config-music.sh"
                                         ]
-                                    },
-                                    "protectedSettings": {
-                                        "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'))]"
                                     }
                                 }
                             }

@@ -40,10 +40,10 @@ az group deployment create --resource-group poc-web-rg --template-file azuredepl
 ```bash
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/azuredeploy.json \
---parameters vmssName=web-vmss instanceCount=2 vmSize=Standard_D1_v2 \
-AzureSqlServerName=pocwebvmsssql001 WebSiteDnsName=aahcwebvmss001 \
+--parameters vmssName=webw2azvmss1 instanceCount=2 vmSize=Standard_D1_v2 \
+AzureSqlServerName=sqlwebw2azsql01 WebSiteDnsName=aahcmusicstore \
 existingVnetName=web-west2-vnet existingSubnetName=web-sn \
-adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySecret=adminPassword
+adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv1 mySecret=adminPassword
 ```
 
 <br>
@@ -53,10 +53,10 @@ adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySe
 ```bash
 az group deployment create --resource-group poc-web-rg \
 --template-uri https://StorageAccountName.blob.core.windows.net/BlobContainerName/azuredeploy.json \
---parameters vmssName=web-vmss instanceCount=2 vmSize=Standard_D1_v2 \
-AzureSqlServerName=pocwebvmsssql001 WebSiteDnsName=aahcwebvmss001 \
+--parameters vmssName=webw2azvmss1 instanceCount=2 vmSize=Standard_D1_v2 \
+AzureSqlServerName=sqlwebw2azsql01 WebSiteDnsName=aahcmusicstore \
 existingVnetName=web-west2-vnet existingSubnetName=web-sn \
-adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv mySecret=adminPassword
+adminUsername=localadmin vaultResourceGroupName=poc-hub-rg vaultName=aahckv1 mySecret=adminPassword
 ```
 
 <br>
