@@ -1,0 +1,111 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName": {
+            "type": "string",
+            "defaultValue": "dc1w2azvm",
+            "metadata": {
+                "description": "The name of dc1w2azvm VM."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "westus2",
+            "metadata": {
+                "description": "The location of dc1w2azvm VM."
+            }
+        },
+        "configZipFileUrl": {
+            "type": "string",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/4_compute/configdc1-modules-scripts.zip",
+            "metadata": {
+                "description": "The URL of configdc1-modules-scripts.zip"
+            }
+        },
+        "configScriptFileName": {
+            "type": "string",
+            "defaultValue": "configdc1.ps1"
+        },
+        "configFunctionName": {
+            "type": "string",
+            "defaultValue": "configdc1"
+        },
+        "configArgAdminUserName": {
+            "type": "string",
+            "defaultValue": "localadmin"
+        },
+        "configArgAdminPassword": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The password for localadmin."
+            }
+        },
+        "configDataFileUrl": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/4_compute/configdc1-config-data.psd1",
+            "metadata": {
+                "description": "The URL of configdc1-config-data.psd1"
+            }
+        },
+        "wmfVersion": {
+            "type": "string",
+            "defaultValue": "latest",
+            "allowedValues": [
+                "4.0",
+                "5.0",
+                "5.1",
+                "latest"
+            ]
+        },
+        "privacy": {
+            "type": "string",
+            "defaultValue": "Enable",
+            "allowedValues": [
+                "Enable",
+                "Disable"
+            ]
+        },
+        "version": {
+            "type": "string",
+            "defaultValue": "2.77"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "[parameters('version')]",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "wmfVersion": "[parameters('wmfVersion')]",
+                    "configuration": {
+                        "url": "[parameters('configZipFileUrl')]",
+                        "script": "[parameters('configScriptFileName')]",
+                        "function": "[parameters('configFunctionName')]"
+                    },
+                    "configurationArguments": {
+                    },
+                    "configurationData": {
+                        "url": "[parameters('configDataFileUrl')]"
+                    },
+                    "privacy": {
+                        "dataCollection": "[parameters('privacy')]"
+                    }
+                },
+                "protectedSettings": {
+                    "configurationArguments": {
+                        "AdminUserName": "[parameters('configArgAdminUserName')]",
+                        "AdminPassword": "[parameters('configArgAdminPassword')]"
+                    }
+                }
+            }
+        }
+    ]
+}
