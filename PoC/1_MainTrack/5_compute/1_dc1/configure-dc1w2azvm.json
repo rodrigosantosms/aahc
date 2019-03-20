@@ -11,7 +11,7 @@
         },
         "configZipFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/Microsoft/Activate-Azure-with-Hybrid-Cloud/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-modules-scripts.zip",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-modules-scripts.zip",
             "metadata": {
                 "description": "The URL of configdc1-modules-scripts.zip"
             }
@@ -37,7 +37,7 @@
         },
         "configDataFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/Microsoft/Activate-Azure-with-Hybrid-Cloud/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-config-data.psd1",
+            "defaultValue": "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-config-data.psd1",
             "metadata": {
                 "description": "The URL of configdc1-config-data.psd1"
             }
