@@ -11,9 +11,9 @@
         },
         "configZipFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-modules-scripts.zip",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/newconfigdc1.ps1.zip",
             "metadata": {
-                "description": "The URL of configdc1-modules-scripts.zip"
+                "description": "The URL of newconfigdc1.ps1.zip"
             }
         },
         "configScriptFileName": {
@@ -56,7 +56,7 @@
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
-                "typeHandlerVersion": "2.77",
+                "typeHandlerVersion": "2.76",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "wmfVersion": "latest",
@@ -68,11 +68,7 @@
                     "configurationArguments": {
                         "DomainName": "[parameters('domainName')]",
                         "DataDiskNumber": 2,
-                        "DataDriveLetter": "F",
-                        "AdminCredentials": {
-                            "userName": "[parameters('AdminUsername')]",
-                            "password": "PrivateSettingsRef:AdminPassword"
-                          }
+                        "DataDriveLetter": "F"
                     },
                     "configurationData": {
                     },
@@ -82,7 +78,10 @@
                 },
                 "protectedSettings": {
                     "configurationArguments": {
-                        "AdminPassword": "[parameters('AdminPassword')]"
+                        "Credential": {
+                            "userName": "[parameters('AdminUsername')]",
+                            "password": "[parameters('AdminPassword')]"
+                        }
                     }
                 }
             }
