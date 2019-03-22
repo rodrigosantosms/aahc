@@ -25,7 +25,7 @@
             "defaultValue": "configdc1"
         },
         "domainName": {
-            "defaultValue": "contosoad.com",
+            "defaultValue": "contosoad",
             "type": "string"
           },
         "AdminUsername": {

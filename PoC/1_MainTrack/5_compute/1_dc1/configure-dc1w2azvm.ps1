@@ -48,6 +48,7 @@ $adminPassword = $adminCred.GetNetworkCredential().password
 # Create parameter hashtable for passing directly to main ARM template
 $ARMTemplateParam = @{}
 $ARMTemplateParam.Add("vmName",$vmName)
+$ARMTemplateParam.Add("domainName","contosoad.com")
 $ARMTemplateParam.Add("adminUserName", $adminUserName)
 $ARMTemplateParam.Add("adminPassword", $adminPassword)
 
