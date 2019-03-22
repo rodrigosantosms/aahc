@@ -11,9 +11,9 @@
         },
         "configZipFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1.ps11.zip",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configure-dc1w2azvm.ps1.zip",
             "metadata": {
-                "description": "The URL of configdc1.ps11.zip"
+                "description": "The URL of configure-dc1w2azvm.ps1.zip"
             }
         },
         "configScriptFileName": {
@@ -25,7 +25,7 @@
             "defaultValue": "configdc1"
         },
         "domainName": {
-            "defaultValue": "contosoad",
+            "defaultValue": "contosoad.com",
             "type": "string"
           },
         "AdminUsername": {
