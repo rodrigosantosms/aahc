@@ -24,6 +24,10 @@
             "type": "string",
             "defaultValue": "configdc1"
         },
+        "domainName": {
+            "defaultValue": "contosoad.com",
+            "type": "string"
+          },
         "AdminUsername": {
             "type": "string",
             "defaultValue": "localadmin"
@@ -33,13 +37,6 @@
             "defaultValue": "",
             "metadata": {
                 "description": "The password for localadmin."
-            }
-        },
-        "configDataFileUrl": {
-            "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1-config-data.psd1",
-            "metadata": {
-                "description": "The URL of configdc1-config-data.psd1"
             }
         },
         "location": {
@@ -69,9 +66,15 @@
                         "function": "[parameters('configFunctionName')]"
                     },
                     "configurationArguments": {
+                        "DomainName": "[parameters('domainName')]",
+                        "DataDiskNumber": 2,
+                        "DataDriveLetter": "F",
+                        "AdminCredentials": {
+                            "userName": "[parameters('AdminUsername')]",
+                            "password": "PrivateSettingsRef:AdminPassword"
+                          }
                     },
                     "configurationData": {
-                        "url": "[parameters('configDataFileUrl')]"
                     },
                     "privacy": {
                         "dataCollection": "Enable"
@@ -79,7 +82,6 @@
                 },
                 "protectedSettings": {
                     "configurationArguments": {
-                        "AdminUsername": "[parameters('AdminUsername')]",
                         "AdminPassword": "[parameters('AdminPassword')]"
                     }
                 }
