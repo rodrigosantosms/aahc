@@ -32,9 +32,6 @@ Param(
     
     [string] $RgName ,
     [string] $vmName ,
-    [string] $AdminUsername ,
-    [string] $VaultName ,
-    [string] $SecretName ,
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'configure-dc1w2azvm.json',
     [string] $ArtifactStagingDirectory = '.',
