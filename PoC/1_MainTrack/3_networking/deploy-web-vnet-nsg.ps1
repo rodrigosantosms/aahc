@@ -40,7 +40,7 @@ Param(
 
 ### Do not change lines below
 if ($ValidateOnly) {
-    $ErrorMessages = Format-ValidationOutput (Test-AzureRmResourceGroupDeployment -Mode Incremental -ResourceGroupName $RgName `
+    $ErrorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment -Mode Incremental -ResourceGroupName $RgName `
                                                                                   -TemplateFile $ARMTemplate `
                                                                                   -TemplateParameterFile $ARMTemplateParam `
                                                                                   @OptionalParameters)
@@ -52,7 +52,7 @@ if ($ValidateOnly) {
     }
 }
 else { 
-    New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $RgName -TemplateFile $ARMTemplate -TemplateParameterFile $ARMTemplateParam -Mode Incremental
+    New-AzResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $RgName -TemplateFile $ARMTemplate -TemplateParameterFile $ARMTemplateParam -Mode Incremental
                                        
     if ($ErrorMessages) {
         Write-Output '', 'Template deployment returned the following errors:', @(@($ErrorMessages) | ForEach-Object { $_.Exception.Message.TrimEnd("`r`n") })
