@@ -1,0 +1,21 @@
+az login
+
+az account set --subscription "SubscriptionID"
+
+cd "C:\Azure\Activate-Azure-with-Hybrid-Cloud\PoC\1_MainTrack\5_compute\3_web"
+
+az group deployment create  \
+    --resource-group poc-web-rg  \
+    --template-file webenvironment.json \
+    --parameters \
+        vmssName=webw2azvmss1 \
+        instanceCount=3 \
+        vmSize=Standard_D1_v2 \
+        AzureSqlServerName=sqlwebw2azsql01 \
+        WebSiteDnsName=aahcmusicstore \
+        existingVnetName=web-west2-vnet \
+        existingSubnetName=web-west2-sn \
+        adminUsername=localadmin \
+        vaultResourceGroupName=poc-hub-rg  \
+        vaultName=aahckv1  \
+        mySecret=adminPassword

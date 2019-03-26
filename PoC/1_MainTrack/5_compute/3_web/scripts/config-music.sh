@@ -20,7 +20,7 @@ dotnet --version  >> /tmp/install.log
 # Phase 2 - Download application
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 2 - Download application" >> /tmp/install.log
-sudo wget -O /tmp/music-store-azure-demo-pub.tar.gz https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-app/music-store-azure-demo-pub.tar.gz --append-output=/tmp/install.log
+sudo wget -O /tmp/music-store-azure-demo-pub.tar.gz https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/music-app/music-store-azure-demo-pub.tar.gz --append-output=/tmp/install.log
 sleep 30
 sudo tar -xzvf /tmp/music-store-azure-demo-pub.tar.gz -C /opt
 
@@ -31,7 +31,7 @@ sudo apt-get install -y nginx >> /tmp/install.log
 sudo service nginx start >> /tmp/install.log
 sudo touch /etc/nginx/sites-available/default >> /tmp/install.log
 sudo cp /etc/nginx/sites-available/default /tmp/bkp_nginx_sites-available_default >> /tmp/install.log
-sudo wget -O /tmp/default https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-app/nginx-config/default --append-output=/tmp/install.log
+sudo wget -O /tmp/default https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/music-app/nginx-config/default --append-output=/tmp/install.log
 sudo mkdir /opt/music/nginx-config >> /tmp/install.log
 sudo cp /tmp/default /opt/music/nginx-config/default >> /tmp/install.log
 sudo cp /tmp/default /etc/nginx/sites-available/default >> /tmp/install.log
@@ -51,7 +51,7 @@ echo "--------------------------------------------------------" >> /tmp/install.
 echo "Phase 5 - Config supervisor" >> /tmp/install.log
 sudo apt-get install -y supervisor
 sudo touch /etc/supervisor/conf.d/music.conf >> /tmp/install.log
-sudo wget -O /etc/supervisor/conf.d/music.conf https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/music-app/supervisor/music.conf --append-output=/tmp/install.log
+sudo wget -O /etc/supervisor/conf.d/music.conf https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/music-app/supervisor/music.conf --append-output=/tmp/install.log
 sudo service supervisor stop >> /tmp/install.log
 sudo service supervisor start >> /tmp/install.log
 
@@ -59,7 +59,7 @@ sudo service supervisor start >> /tmp/install.log
 echo "--------------------------------------------------------" >> /tmp/install.log
 echo "Phase 6 - Pre-create music store database" >> /tmp/install.log
 dotnet --version >> /tmp/dotnetversion.log
-sudo wget -O /etc/init.d/musicstorestopstart.sh https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/scripts/musicstorestopstart.sh --append-output=/tmp/install.log
+sudo wget -O /etc/init.d/musicstorestopstart.sh https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/scripts/musicstorestopstart.sh --append-output=/tmp/install.log
 chmod a+x /etc/init.d/musicstorestopstart.sh
 sudo update-rc.d musicstorestopstart.sh defaults
 sudo /etc/init.d/musicstorestopstart.sh start

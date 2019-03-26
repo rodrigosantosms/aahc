@@ -280,7 +280,7 @@
                                     "protectedSettings": {
                                         "commandToExecute": "[concat('sudo sh config-music.sh ',parameters('AzureSqlServerName'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'))]",
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/2-poc/2-1-maintrack/templates/vmscaleset/scripts/config-music.sh"
+                                            "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/scripts/config-music.sh"
                                         ]
                                     }
                                 }
