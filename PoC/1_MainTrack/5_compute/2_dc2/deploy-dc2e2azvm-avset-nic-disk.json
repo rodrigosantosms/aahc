@@ -28,17 +28,19 @@
             }
         },
         "domainName": {
-            "defaultValue": "contosoad.com",
-            "type": "string"
+            "type": "string",
+            "defaultValue": "contosoad.com"
         },
         "existingVnetName": {
             "type": "string",
+            "defaultValue": "recovery-east2-vnet",
             "metadata": {
                 "description": "Name of the existing virtual network to deploy the VM"
             }
         },
         "existingSubnetName": {
             "type": "string",
+            "defaultValue": "adds-east2-sn",
             "metadata": {
                 "description": "Name of the existing subnet to deploy the VM"
             }
