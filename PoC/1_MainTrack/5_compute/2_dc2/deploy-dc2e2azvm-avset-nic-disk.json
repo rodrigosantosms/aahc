@@ -69,7 +69,7 @@
         "dataDiskSize": 1,
         "dataDisksCount": 1,
         "diskType": "StandardSSD_LRS",
-        "OSDiskName": "[concat(toLower(parameters('vmName')),'OSDisk')]",
+        "OSDiskName": "[concat(toLower(parameters('vmName')),'_OsDisk')]",
         "osType": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
