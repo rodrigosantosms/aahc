@@ -11,8 +11,8 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    Activate Azure with Hybrid Cloud - Main Track - FileName: create-configure-dc2e2azvm.ps1
-    This script deploys an ARM Template which installs Powershell DSC and Configures the server
+    Activate Azure with Hybrid Cloud - Main Track - FileName: deploy-dc2e2azvm-avset-nic-disk.ps1
+    This script deploys an ARM Template which creates a VM, Availablity Set, vNIC and Managed Data Disk
 .NOTES
     AUTHOR(S): Microsoft Enterprise Services
     KEYWORDS: Azure Deploy, PoC, Deployment
@@ -25,26 +25,37 @@
 #    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Hub Resources
 #
 # Example of how to run this script:
-# .\create-configure-dc2e2azvm.ps1 -RgName "poc-hub-rg" -AdminUsername "localadmin" -VaultName "aahcrecovery01" -SecretName "AdminPassword"
+# .\deploy-dc2e2azvm-avset-nic-disk.ps1 -RgName "poc-recovery-rg" -vmName "dc2e2azvm" -vmSize "Standard_D2s_v3" -existingVnetName "recovery-east2-vnet" -existingSubnetName "adds-east2-sn" -stgAcctName "aahcrece2sa01"
 
 ### Update the parameters below or provide the values when running the script
 Param(
     
-    [string] $RgName = '',
-    [string] $vmName = '',
-    [string] $AdminUsername = '',
-    [string] $VaultName = '',
-    [string] $SecretName = '',
+    [string] $RgName,
+    [string] $vmName,
+    [string] $vmSize,
+    [string] $existingVnetName,
+    [string] $existingSubnetName,
+    [string] $stgAcctName ,
     [switch] $UploadArtifacts,
-    [string] $ARMTemplate = 'configure-dc1w2azvm.json',
+    [string] $ARMTemplate = 'deploy-dc2e2azvm-avset-nic-disk.json',
     [string] $ArtifactStagingDirectory = '.',
     [string] $DeploymentName = 'Deploy-' + (((Get-Date).ToUniversalTime()).ToString('MMddyyyy-HHmm')),
     [switch] $ValidateOnly
 )
 
-### Do not change lines below
-$AdminPassword = Get-AzKeyVaultSecret -VaultName $VaultName -Name $SecretName
-$ARMTemplateParam = @{"vmName"=$vmName;"AdminUsername"=$AdminUsername;"AdminPassword"=$AdminPassword.SecretValueText}
+
+# Get credentials for VMs
+$adminUserName = "localadmin"
+$adminCred = Get-Credential -UserName $adminUserName -Message "Enter password for user: $adminUserName"
+$adminPassword = $adminCred.GetNetworkCredential().password
+
+# Create parameter hashtable for passing directly to main ARM template
+$ARMTemplateParam = @{}
+$ARMTemplateParam.Add("vmName",$vmName)
+$ARMTemplateParam.Add("domainName","contosoad.com")
+$ARMTemplateParam.Add("adminUserName", $adminUserName)
+$ARMTemplateParam.Add("adminPassword", $adminPassword)
+
 
 if ($ValidateOnly) {
     $ErrorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment -Mode Incremental -ResourceGroupName $RgName `

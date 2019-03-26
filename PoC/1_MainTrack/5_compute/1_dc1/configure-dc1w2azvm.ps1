@@ -25,7 +25,7 @@
 #    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Hub Resources
 #
 # Example of how to run this script:
-# .\configure-dc1w2azvm.ps1 -RgName "poc-hub-rg" -AdminUsername "localadmin" -VaultName "aahchub01" -SecretName "AdminPassword"
+# .\configure-dc1w2azvm.ps1 -RgName "poc-hub-rg" -vmName "dc1w2azvm"
 
 ### Update the parameters below or provide the values when running the script
 Param(
