@@ -191,6 +191,9 @@
             "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
             "apiVersion": "2018-10-01",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
