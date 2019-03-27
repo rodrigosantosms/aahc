@@ -1,0 +1,678 @@
+{
+  "properties": {
+    "lenses": {
+      "0": {
+        "order": 0,
+        "parts": {
+          "0": {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "colSpan": 3,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "<img width='170' src='https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/6_dashboard/mslogo.png'/>",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "1": {
+            "position": {
+              "x": 3,
+              "y": 0,
+              "colSpan": 12,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "# Activate Azure with Hybrid Cloud\r\n---",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "2": {
+            "position": {
+              "x": 15,
+              "y": 0,
+              "colSpan": 4,
+              "rowSpan": 6
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "resourceType",
+                  "value": "Microsoft.Resources/resources",
+                  "isOptional": true
+                },
+                {
+                  "name": "filter",
+                  "isOptional": true
+                },
+                {
+                  "name": "scope",
+                  "isOptional": true
+                },
+                {
+                  "name": "kind",
+                  "isOptional": true
+                }
+              ],
+              "type": "Extension/HubsExtension/PartType/BrowseAllResourcesPinnedPart"
+            }
+          },
+          "3": {
+            "position": {
+              "x": 0,
+              "y": 1,
+              "colSpan": 3,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "## Primary DC",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "4": {
+            "position": {
+              "x": 3,
+              "y": 1,
+              "colSpan": 3,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "## Backup DC",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "5": {
+            "position": {
+              "x": 6,
+              "y": 1,
+              "colSpan": 3,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "## Web VMSS",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "6": {
+            "position": {
+              "x": 9,
+              "y": 1,
+              "colSpan": 4,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "## Azure SQL DB - MusicStore",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "7": {
+            "position": {
+              "x": 13,
+              "y": 1,
+              "colSpan": 2,
+              "rowSpan": 1
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/MarkdownPart",
+              "settings": {
+                "content": {
+                  "settings": {
+                    "content": "## General",
+                    "title": "",
+                    "subtitle": ""
+                  }
+                }
+              }
+            }
+          },
+          "8": {
+            "position": {
+              "x": 0,
+              "y": 2,
+              "colSpan": 3,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-hub-rg/providers/Microsoft.Compute/virtualMachines/dc1w2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/CpuPercentageMetricsSummaryPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "9": {
+            "position": {
+              "x": 3,
+              "y": 2,
+              "colSpan": 3,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-recovery-rg/providers/Microsoft.Compute/virtualMachines/dc2e2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/CpuPercentageMetricsSummaryPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "10": {
+            "position": {
+              "x": 6,
+              "y": 2,
+              "colSpan": 3,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "sharedTimeRange",
+                  "isOptional": true
+                },
+                {
+                  "name": "options",
+                  "value": {
+                    "charts": [
+                      {
+                        "title": "CPU (average)",
+                        "metrics": [
+                          {
+                            "name": "Percentage CPU",
+                            "resourceMetadata": {
+                              "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1"
+                            },
+                            "aggregationType": 1,
+                            "type": "host"
+                          }
+                        ],
+                        "itemDataModel": {
+                          "metrics": [
+                            {
+                              "id": {
+                                "resourceDefinition": {
+                                  "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "id": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "name": "webw2azvmss1"
+                                },
+                                "name": {
+                                  "id": "Percentage CPU"
+                                }
+                              },
+                              "metricAggregation": 4,
+                              "color": "#47BDF5"
+                            }
+                          ],
+                          "title": "CPU (average)",
+                          "filters": null,
+                          "visualization": {
+                            "chartType": 2
+                          }
+                        }
+                      }
+                    ],
+                    "v2charts": true,
+                    "version": 1
+                  },
+                  "isOptional": true
+                }
+              ],
+              "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+              "settings": {
+                "content": {
+                  "options": {
+                    "version": 1,
+                    "chart": {
+                      "metrics": [
+                        {
+                          "resourceMetadata": {
+                            "id": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1"
+                          },
+                          "name": "Percentage CPU",
+                          "aggregationType": 4,
+                          "metricVisualization": {
+                            "color": "#47BDF5",
+                            "resourceDisplayName": "webw2azvmss1"
+                          }
+                        }
+                      ],
+                      "visualization": {
+                        "chartType": 2
+                      },
+                      "title": "CPU (average)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "11": {
+            "position": {
+              "x": 9,
+              "y": 2,
+              "colSpan": 4,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Sql/servers/aahcsqlwebw2azsql01/databases/MusicStore"
+                }
+              ],
+              "type": "Extension/SqlAzureExtension/PartType/resourceUtilizationAdapterPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "Database"
+              }
+            }
+          },
+          "12": {
+            "position": {
+              "x": 13,
+              "y": 2,
+              "colSpan": 2,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/Microsoft_Azure_Security/PartType/SecurityMetricGalleryTileViewModel"
+            }
+          },
+          "13": {
+            "position": {
+              "x": 0,
+              "y": 5,
+              "colSpan": 3,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-hub-rg/providers/Microsoft.Compute/virtualMachines/dc1w2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/MemoryPercentageMetricsPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "14": {
+            "position": {
+              "x": 3,
+              "y": 5,
+              "colSpan": 3,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-recovery-rg/providers/Microsoft.Compute/virtualMachines/dc2e2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/MemoryPercentageMetricsPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "15": {
+            "position": {
+              "x": 6,
+              "y": 5,
+              "colSpan": 3,
+              "rowSpan": 4
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "options",
+                  "value": {
+                    "charts": [
+                      {
+                        "title": "Network (total)",
+                        "metrics": [
+                          {
+                            "name": "Network In",
+                            "resourceMetadata": {
+                              "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1"
+                            },
+                            "aggregationType": 4,
+                            "type": "host"
+                          },
+                          {
+                            "name": "Network Out",
+                            "resourceMetadata": {
+                              "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1"
+                            },
+                            "aggregationType": 4,
+                            "type": "host"
+                          }
+                        ],
+                        "itemDataModel": {
+                          "metrics": [
+                            {
+                              "id": {
+                                "resourceDefinition": {
+                                  "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "id": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "name": "webw2azvmss1"
+                                },
+                                "name": {
+                                  "id": "Network In"
+                                }
+                              },
+                              "metricAggregation": 1,
+                              "color": "#47BDF5"
+                            },
+                            {
+                              "id": {
+                                "resourceDefinition": {
+                                  "resourceId": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "id": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Compute/virtualMachineScaleSets/webw2azvmss1",
+                                  "name": "webw2azvmss1"
+                                },
+                                "name": {
+                                  "id": "Network Out"
+                                }
+                              },
+                              "metricAggregation": 1,
+                              "color": "#7E58FF"
+                            }
+                          ],
+                          "title": "Network (total)",
+                          "filters": null,
+                          "visualization": {
+                            "chartType": 2
+                          }
+                        }
+                      }
+                    ],
+                    "v2charts": true,
+                    "version": 1
+                  },
+                  "isOptional": true
+                },
+                {
+                  "name": "sharedTimeRange",
+                  "isOptional": true
+                }
+              ],
+              "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+              "settings": {}
+            }
+          },
+          "16": {
+            "position": {
+              "x": 9,
+              "y": 5,
+              "colSpan": 4,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Sql/servers/aahcsqlwebw2azsql01/databases/MusicStore"
+                }
+              ],
+              "type": "Extension/SqlAzureExtension/PartType/databaseUsageSizeAdapterPart",
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "Database"
+              }
+            }
+          },
+          "17": {
+            "position": {
+              "x": 13,
+              "y": 5,
+              "colSpan": 2,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/ClockPart",
+              "settings": {}
+            }
+          },
+          "18": {
+            "position": {
+              "x": 15,
+              "y": 6,
+              "colSpan": 4,
+              "rowSpan": 3
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "queryInputs",
+                  "value": {
+                    "subscriptions": "a8405bbf-10cc-41f5-9aab-02d6d6394adb",
+                    "regions": "eastus2;westus2;global",
+                    "services": "",
+                    "resourceGroupId": "all",
+                    "timeSpan": "5",
+                    "startTime": "2019-03-24T04:29:28.808Z",
+                    "endTime": "2019-03-27T04:29:28.808Z",
+                    "queryName": "poc-servicehealth",
+                    "queryId": "ad1cb258-17de-468d-a308-8fdf5d08f6cf",
+                    "loadFromCache": false,
+                    "communicationType": "incident",
+                    "statusFilter": "active"
+                  }
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Health/PartType/ServiceIssuesTilePart"
+            }
+          },
+          "19": {
+            "position": {
+              "x": 0,
+              "y": 7,
+              "colSpan": 3,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-hub-rg/providers/Microsoft.Compute/virtualMachines/dc1w2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/NetworkInOutMetricsSummaryPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "20": {
+            "position": {
+              "x": 3,
+              "y": 7,
+              "colSpan": 3,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-recovery-rg/providers/Microsoft.Compute/virtualMachines/dc2e2azvm"
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_Compute/PartType/NetworkInOutMetricsSummaryPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "VirtualMachine"
+              }
+            }
+          },
+          "21": {
+            "position": {
+              "x": 9,
+              "y": 7,
+              "colSpan": 4,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "id",
+                  "value": "/subscriptions/a8405bbf-10cc-41f5-9aab-02d6d6394adb/resourceGroups/poc-web-rg/providers/Microsoft.Sql/servers/aahcsqlwebw2azsql01/databases/MusicStore"
+                }
+              ],
+              "type": "Extension/SqlAzureExtension/PartType/databaseConnectionsAdapterPart",
+              "settings": {},
+              "isAdapter": true,
+              "asset": {
+                "idInputName": "id",
+                "type": "Database"
+              }
+            }
+          },
+          "22": {
+            "position": {
+              "x": 13,
+              "y": 7,
+              "colSpan": 2,
+              "rowSpan": 2
+            },
+            "metadata": {
+              "inputs": [],
+              "type": "Extension/HubsExtension/PartType/HelpAndSupportPart"
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "model": {
+        "timeRange": {
+          "value": {
+            "relative": {
+              "duration": 24,
+              "timeUnit": 1
+            }
+          },
+          "type": "MsPortalFx.Composition.Configuration.ValueTypes.TimeRange"
+        },
+        "filterLocale": {
+          "value": "en-us"
+        },
+        "filters": {
+          "value": {
+            "MsPortalFx_TimeRange": {
+              "model": {
+                "format": "local",
+                "granularity": "auto",
+                "relative": "30m"
+              },
+              "displayCache": {
+                "name": "Local Time",
+                "value": "Past 30 minutes"
+              },
+              "filteredPartIds": [
+                "StartboardPart-MonitorChartPart-f8f1960a-adef-4d86-bb80-d94860137449",
+                "StartboardPart-MonitorChartPart-f8f1960a-adef-4d86-bb80-d94860137455"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "name": "Activate Azure with Hybrid Cloud",
+  "type": "Microsoft.Portal/dashboards",
+  "location": "INSERT LOCATION",
+  "tags": {
+    "hidden-title": "Activate Azure with Hybrid Cloud"
+  },
+  "apiVersion": "2015-08-01-preview"
+}
