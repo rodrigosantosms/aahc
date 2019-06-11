@@ -21,8 +21,6 @@
 # IMPORTANT: Change the value of the following parameters if needed:
 #    RgName        <-- This is the Resource Group Name created to host Recovery West2 Resources
 #    RgLocation    <-- This is the location of Recovery EastUS2 Resource Group (Default is EastUS2)
-#    ARMTemplate  <-- This is the path of the ARM Template will be used to deploy the Recovery Resources
-#    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Recovery Resources
 # 
 
 ### Update the parameters below or provide the values when calling the script

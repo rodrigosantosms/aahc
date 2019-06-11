@@ -56,7 +56,7 @@
             "type": "string",
             "defaultValue": "YOURPREFIXrece2sa01",
             "metadata": {
-                "description": "Storage Account name in the Poc-Recovery-Rg"
+                "description": "Name of the existing Storage Account in the Poc-Recovery-Rg"
             }
         }
     },
