@@ -11,10 +11,10 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    Activate Azure with Hybrid Cloud - Main Track - FileName: configure-dc1w2azvm.ps1
+    FileName: configure-dc1w2azvm.ps1
     This script deploys an ARM Template which installs Powershell DSC and Configures the server
 .NOTES
-    AUTHOR(S): Microsoft Enterprise Services
+    AUTHOR(S):
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 

@@ -54,9 +54,9 @@
         },
         "stgAcctName": {
             "type": "string",
-            "defaultValue": "YOURPREFIXrece2sa01",
+            "defaultValue": "MYPREFIXrece2sa01",
             "metadata": {
-                "description": "Name of the existing Storage Account in the Poc-Recovery-Rg"
+                "description": "Name of the existing Storage Account in the MYPREfIX-Poc-Recovery-Rg"
             }
         }
     },

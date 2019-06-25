@@ -11,10 +11,10 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    Activate Azure with Hybrid Cloud - Main Track - FileName: deploy-dc2e2azvm-avset-nic-disk.ps1
+    FileName: deploy-dc2e2azvm-avset-nic-disk.ps1
     This script deploys an ARM Template which creates a VM, Availablity Set, vNIC and Managed Data Disk
 .NOTES
-    AUTHOR(S): Microsoft Enterprise Services
+    AUTHOR(S):
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 

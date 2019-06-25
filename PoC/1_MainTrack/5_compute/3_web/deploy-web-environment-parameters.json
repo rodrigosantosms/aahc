@@ -33,7 +33,7 @@
             "value": "poc-hub-rg"
         },
         "mySecret": {
-            "value": "adminPassword"
+            "value": "AdminPassword"
         }
     }
 }

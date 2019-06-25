@@ -11,10 +11,9 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    Activate Azure with Hybrid Cloud - Main Track - FileName: deploy-hub-sa2.ps1
+    FileName: deploy-hub-sa2.ps1
     This script deploys an ARM Template which creates a single Storage Account
 .NOTES
-    AUTHOR(S): Microsoft Enterprise Services
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 
@@ -28,7 +27,7 @@
 ### Update the parameters below or provide the values when calling the script
 Param(
     
-    [string] $RgName = 'poc-hub-rg',
+    [string] $RgName = 'MYPREFIX-poc-hub-rg',
     [string] $RgLocation = 'westus2',
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'hub-sa2.json',
