@@ -11,10 +11,10 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    Activate Azure with Hybrid Cloud - Main Track - FileName: deploy-web-vnet-nsg.ps1
+    FileName: deploy-web-vnet-nsg.ps1
     This script deploys an ARM Template which creates Vnets, Subnets and NSG resources
 .NOTES
-    AUTHOR(S): Microsoft Enterprise Services
+    AUTHOR(S): 
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 
@@ -23,10 +23,12 @@
 #    RgLocation    <-- This is the location of Web EastUS2 Resource Group (Default is EastUS2)
 # 
 
+# Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
+
 ### Update the parameters below or provide the values when calling the script
 Param(
     
-    [string] $RgName = 'poc-web-rg',
+    [string] $RgName = 'MYPREFIX-poc-web-rg',
     [string] $RgLocation = 'westus2',
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'web-vnet-nsg.json',
