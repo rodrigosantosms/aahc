@@ -45,7 +45,7 @@
                         "name": "AllowRDPandHTTPIn",
                         "properties": {
                             "description": "Allow RDP and HTTP from Hub Vnet",
-                            "protocol": "*",
+                            "protocol": "Tcp",
                             "sourcePortRange": "*",
                             "destinationPortRanges": [
                                 "3389",
