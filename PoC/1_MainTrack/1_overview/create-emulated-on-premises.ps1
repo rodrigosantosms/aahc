@@ -9,7 +9,7 @@ $VMSize = "Standard_D2s_v3"
 
 #Subscription Details
 #Login-AZAccount
-Select-AZSubscription -SubscriptionId "Enter_Your_SubscriptionID_Here"
+Select-AZSubscription -SubscriptionId "467935cd-d314-4b45-8a8b-8ef1d22878b6"
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------#
@@ -41,3 +41,11 @@ $nsgRuleRDP = New-AzNetworkSecurityRuleConfig -Name "Allow_RDP_In"  -Protocol Tc
 # Create a network security group
 $NsgName = "Jumpbox-NSG"
 New-AzNetworkSecurityGroup -ResourceGroupName $rg -Location $location -Name $NsgName -SecurityRules $nsgRuleRDP
+
+# Create Local Network Gateway and Connections
+$vngop = Get-AzVirtualNetworkGateway -Name "on-premfirewall-vng"  -ResourceGroupName "emulated-on-premises-rg"
+for ($i=101; $i -le 112; $i++ ){
+        New-AzLocalNetworkGateway -Name "LNG-$i" -ResourceGroupName "emulated-on-premises-rg" -Location "West US 2" -GatewayIpAddress "$i.0.0.0" -AddressPrefix "10.$i.0.0/22"
+        $lng = Get-AzLocalNetworkGateway   -Name "LNG-$i" -ResourceGroupName "emulated-on-premises-rg"
+        New-AzVirtualNetworkGatewayConnection -Name "Conn-$i" -ResourceGroupName "emulated-on-premises-rg" -Location "West US 2" -VirtualNetworkGateway1 $vngop -LocalNetworkGateway2 $lng -ConnectionType IPsec -SharedKey "cheesebread0101$"
+}
