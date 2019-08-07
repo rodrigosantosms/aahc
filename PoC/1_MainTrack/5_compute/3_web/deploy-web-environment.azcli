@@ -1,7 +1,0 @@
-az login
-
-az account set --subscription "Emter_your_Subscription_ID"
-
-cd "C:\Azure\Activate-Azure-with-Hybrid-Cloud\PoC\1_MainTrack\5_compute\3_web"
-
-az group deployment create --resource-group MYPREFIX-poc-web-rg --template-file deploy-web-environment.json --parameters vmssName=webw2azvmss1 instanceCount=3 vmSize=Standard_D1_v2 AzureSqlServerName=sqlwebw2azsql01 WebSiteDnsName=aahcmusicstore existingVnetName=web-west2-vnet existingSubnetName=web-west2-sn adminUsername=localadmin vaultResourceGroupName=MYPREFIX-poc-hub-rg vaultName=MYPREFIXaahckeyvault01 mySecret=AdminPassword

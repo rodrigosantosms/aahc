@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmssName": {
+            "value": "webw2azvmss1"
+        },
+        "instanceCount": {
+            "value": 2
+        },
+        "vmSize": {
+            "value": "Standard_D1_v2"
+        },
+        "AzureSqlServerName": {
+            "value": "aliassqlwebw2azsql01"
+        },
+        "WebSiteDnsName": {
+            "value": "aliasmusicstore"
+        },
+        "existingVnetName": {
+            "value": "web-west2-vnet"
+        },
+        "existingSubnetName": {
+            "value": "web-sn"
+        },
+        "adminUsername": {
+            "value": "localadmin"
+        },
+        "vaultName": {
+            "value": "aliaskeyvault01"
+        },
+        "vaultResourceGroupName": {
+            "value": "alias-poc-hub-rg"
+        },
+        "mySecret": {
+            "value": "AdminPassword"
+        }
+    }
+}

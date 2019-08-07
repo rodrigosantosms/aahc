@@ -1,0 +1,128 @@
+################### STEP 3.1.3 - LOGGING INTO AZURE ###################
+#Azure CLI
+# 1 - Logging into Azure
+az login
+
+#or
+
+#Azure CLI
+# 1 - Logging into Azure with credentials
+az login -u <username> -p <password>
+
+#or
+
+#Azure CLI
+# 1 - Logging into Azure with credentials
+read -sp "Azure password: " AZ_PASS && echo && az login -u <username> -p $AZ_PASS
+
+#or
+
+#Azure CLI
+# 1 - Logging into Azure with Service Principals
+az login --service-principal -u <app-url> -p <password-or-cert> --tenant <tenant>
+
+#or
+
+#Azure CLI
+# 1 - Logging into Azure with Multiple Tenants and Subscriptions
+az login
+az account set --subscription "Your_subscription_ID"
+
+
+################### STEP 3.1.5 - CREATE NEW HIDDEN DIRECTORY ###################
+#Azure CLI
+# 1 - Creating new hidden directory
+sudo mkdir /home/azureuser/.ssh
+
+################### STEP 3.1.6 - CREATE NEW HIDDEN DIRECTORY ###################
+#Azure CLI
+# 1 - Creating new SSH Key
+ssh-keygen -t rsa -b 2048 -C "azureuser@lnxvms"
+ls -al ~/.ssh
+cat ~/.ssh/id_rsa.pub
+sudo chmod 400 ~/.ssh/id_rsa
+
+
+################### STEP 3.2.1 - SUBNETS ###################
+#Azure CLI
+# Creating subnet lnx-east2-sn in recovery-east2-vnet
+# 1 - create subnet lnx-east2-sn
+az network vnet subnet create --address-prefix 172.16.202.0/24 --name lnx-east2-sn --resource-group poc-recovery-rg --vnet-name recovery-east2-vnet
+
+
+################### STEP 3.2.2 - NETWORK SECURITY GROUPS ###################
+#Azure CLI
+# Creating lnx-east2-nsg for lnx-east2-sn
+# 1 - create network security group
+az network nsg create --name lnx-east2-nsg --resource-group poc-recovery-rg --location eastus2
+
+#Azure CLI
+# Creating Security Rules for lnx-east2-nsg
+# 1 - Create inbound ssh rule
+az network nsg rule create --name allowSshInbound --nsg-name lnx-east2-nsg --priority 1000 --resource-group poc-recovery-rg --protocol Tcp --source-port-ranges "*" --destination-port-ranges 22 --source-address-prefixes Internet --destination-address-prefixes VirtualNetwork --direction Inbound --access Allow --description ssh
+
+# 2 - Create inbound https rule
+az network nsg rule create --name allowHttpsInbound --nsg-name lnx-east2-nsg --priority 1100 --resource-group poc-recovery-rg --protocol Tcp --source-port-ranges "*" --destination-port-ranges 443 --source-address-prefixes Internet --destination-address-prefixes VirtualNetwork --direction Inbound --access Allow --description https
+
+# 3 - Create inbound http rule
+az network nsg rule create --name allowHttpInbound --nsg-name lnx-east2-nsg --priority 1200 --resource-group poc-recovery-rg --protocol Tcp --source-port-ranges "*" --destination-port-ranges "80,8080" --source-address-prefixes Internet --destination-address-prefixes VirtualNetwork --direction Inbound --access Allow --description http
+
+# 4 - Associate nsg with subnet
+az network vnet subnet update --name lnx-east2-sn --resource-group poc-recovery-rg --vnet-name recovery-east2-vnet --network-security-group lnx-east2-nsg
+
+
+
+################### STEP 3.3.1 - VIRTUAL MACHINES ###################
+#Azure CLI
+# Create Linux CentOS 7.4 VM lnx1azvm
+# Refrence: https://docs.microsoft.com/en-us/cli/azure/vm?view=azure-cli-latest#az-vm-create
+# 1 - Creating Public IP Address resource
+az network public-ip create --resource-group poc-recovery-rg --name lnx1azvm-pip --allocation-method dynamic --location eastus2 --sku basic --dns-name "lnxweb"
+
+# 2 - Creating Virtual Network Interface resource
+az network nic create --resource-group poc-recovery-rg --name lnx1azvm-vnic --vnet-name recovery-east2-vnet --accelerated-networking false --subnet lnx-east2-sn --network-security-group lnx-east2-nsg --public-ip-address lnx1azvm-pip --location eastus2
+
+# 3 - Creating Virtual Machine
+az vm create --name lnx1azvm --resource-group poc-recovery-rg --boot-diagnostics-storage [alias]rece2sa02 --location eastus2 --storage-sku Standard_LRS --image CentOS --size Standard_D1_v2 --nics lnx1azvm-vnic --os-disk-name lnx1azvm-OsDisk_1 --os-disk-size-gb 32 --authentication-type ssh --ssh-key-value "$(cat ~/.ssh/id_rsa.pub)"
+# or
+#az vm create --name lnx1azvm --resource-group poc-recovery-rg --boot-diagnostics-storage [alias]rece2sa02 --location eastus2 --storage-sku Standard_LRS --image CentOS --size Standard_D1_v2 --nics lnx1azvm-vnic --os-disk-name "lnx1azvm-OsDisk_1" --os-disk-size-gb 32 --authentication-type password --admin-username localadmin --admin-password "YourSecurePassword"
+
+
+
+################### STEP 3.3.2 - POST PROVISIONING ###################
+#Azure CLI
+# Creating Container Blob in the Storage Account
+# 1 - Get the Storage Account Keys list and create a new public container
+sakey=$(az storage account keys list -g poc-recovery-rg -n [alias]rece2sa02 --query [0].value -o tsv)
+az storage container create --name linux --account-name [alias]rece2sa02 --account-key $sakey --auth-mode key --public-access container
+
+# 2 - Uploading the file to the Container
+# Open the folder that the Microsoft Engineer shared with you, ahd check the path of the file installweb.sh
+#(e.g.: /home/YourUser/azure/Activate-Azure-with-Hybrid-Cloud/scripts/installweb.sh)
+# or
+#(e.g.: c:\azure\Activate-Azure-with-Hybrid-Cloud\scripts\installweb.sh)
+sakey=$(az storage account keys list -g poc-recovery-rg -n [alias]rece2sa02 --query [0].value -o tsv)
+az storage blob upload -f "/tmp/installweb.sh" -c linux -n "installweb.sh" --account-name [alias]rece2sa02 --account-key $sakey --auth-mode key
+
+# 3 - Connecting to lnx1azvm
+lnx1azvmpip=$(az network public-ip show --resource-group poc-recovery-rg --name lnx1azvm-pip --query ipAddress -o tsv)
+ssh -i ~/.ssh/id_rsa -p 22 azureuser@$lnx1azvmpip
+
+# 4 - Downloading the script from the Storage Account
+#(Yes, we could have just copied the file to the server through ssh session)
+#(We are executing in this way just to show the Storage Account integration and usability in some cases)
+wget -P /tmp/ "https://[alias]rece2sa02.blob.core.windows.net/linux/installweb.sh"
+
+# 5 - Changing File Permissions
+chmod a+x /tmp/installweb.sh
+
+# 6 - Running Web Installation Script (this step takes about 5 Minutes - depending on the VM Performance)
+cd /tmp
+sudo ./installweb.sh -install
+
+# 7 - Exiting the Server
+exit
+
+# 8 - Validating Web Site
+lnx1azvmpip=$(az network public-ip show --resource-group poc-recovery-rg --name lnx1azvm-pip --query ipAddress -o tsv)
+wget http://$lnx1azvmpip -O - | grep

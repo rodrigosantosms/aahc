@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "web_west2_vnet_addressspace": {
+            "value": "192.168.100.0/24",
+            "metadata": {
+                "description": "Web West2 Vnet Address space"
+            }
+        },
+        "web_west2_subnet_addressrange": {
+            "value": "192.168.100.0/24",
+            "metadata": {
+                "description": "Web West2 Subnet Address Range"
+            }
+        },
+        "hub_wets2_vnet_addressspace": {
+            "value": "10.100.0.0/22",
+            "metadata": {
+                "description": "Hub West2 Vnet Address space"
+            }
+        }
+    }
+}

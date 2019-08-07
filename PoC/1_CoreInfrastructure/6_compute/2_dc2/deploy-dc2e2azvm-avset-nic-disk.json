@@ -1,0 +1,230 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName": {
+            "type": "string",
+            "defaultValue": "dc2e2azvm",
+            "metadata": {
+                "description": "The name of Second Domain Controller of this PoC."
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3",
+            "metadata": {
+                "description": "The virtual machine size. Enter a Premium capable VM size if DiskType is entered as Premium_LRS"
+            }
+        },
+        "AdminUsername": {
+            "type": "string",
+            "defaultValue": "localadmin"
+        },
+        "AdminPassword": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The password for localadmin."
+            }
+        },
+        "domainName": {
+            "type": "string",
+            "defaultValue": "contosoad.com"
+        },
+        "existingVnetName": {
+            "type": "string",
+            "defaultValue": "recovery-east2-vnet",
+            "metadata": {
+                "description": "Name of the existing virtual network to deploy the VM"
+            }
+        },
+        "existingSubnetName": {
+            "type": "string",
+            "defaultValue": "adds-east2-sn",
+            "metadata": {
+                "description": "Name of the existing subnet to deploy the VM"
+            }
+        },
+        "configZipFileUrl": {
+            "type": "string",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/2_dc2/configdc2.ps1.zip",
+            "metadata": {
+                "description": "The URL of configdc2.ps1.zip"
+            }
+        },
+        "stgAcctName": {
+            "type": "string",
+            "defaultValue": "MYPREFIXrece2sa01",
+            "metadata": {
+                "description": "Name of the existing Storage Account in the MYPREfIX-Poc-Recovery-Rg"
+            }
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "avsetName": "[concat('dc-',variables('location'), '-avset')]",
+        "nicName": "[concat(parameters('vmName'), '-nic')]",
+        "configScriptFileName": "configdc2.ps1",
+        "configFunctionName": "configdc2",
+        "dataDiskSize": 1,
+        "dataDisksCount": 1,
+        "diskType": "StandardSSD_LRS",
+        "OSDiskName": "[concat(toLower(parameters('vmName')),'_OsDisk')]",
+        "osType": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2016-Datacenter-smalldisk",
+            "version": "latest"
+        },
+        "imageReference": "[variables('osType')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Compute/availabilitySets",
+            "sku": {
+                "name": "Aligned"
+            },
+            "name": "[variables('avsetName')]",
+            "apiVersion": "2018-10-01",
+            "location": "[variables('location')]",
+            "scale": null,
+            "properties": {
+                "platformUpdateDomainCount": 2,
+                "platformFaultDomainCount": 2,
+                "virtualMachines": []
+            }
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubNetName'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/availabilitySets/', variables('avsetName'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ],
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('avsetName'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computername": "[parameters('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[variables('OSDiskName')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[variables('diskType')]"
+                        }
+                    },
+                    "imageReference": "[variables('imageReference')]",
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[variables('dataDisksCount')]",
+                            "input": {
+                                "name": "[concat(parameters('vmName'),'_DataDisk_',copyIndex('dataDisks'))]",
+                                "diskSizeGB": "[variables('dataDiskSize')]",
+                                "lun": "[copyIndex('dataDisks')]",
+                                "createOption": "Empty",
+                                "caching": "None",
+                                "writeAcceleratorEnabled": false,
+                                "managedDisk": {
+                                    "storageAccountType": "[variables('diskType')]"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('stgAcctName'), '.blob.core.windows.net', '/')]"
+                    }
+                },
+                "licenseType": "Windows_Server"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
+            "apiVersion": "2018-10-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.76",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "[parameters('configZipFileUrl')]",
+                        "script": "[variables('configScriptFileName')]",
+                        "function": "[variables('configFunctionName')]"
+                    },
+                    "configurationArguments": {
+                        "domainName": "[parameters('domainName')]",
+                        "DiskNumber": 2,
+                        "DriveLetter": "F"
+                    },
+                    "configurationData": {},
+                    "privacy": {
+                        "dataCollection": "Enable"
+                    }
+                },
+                "protectedSettings": {
+                    "configurationArguments": {
+                        "Credential": {
+                            "userName": "[parameters('AdminUsername')]",
+                            "password": "[parameters('AdminPassword')]"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
