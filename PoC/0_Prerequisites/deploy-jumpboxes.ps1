@@ -14,7 +14,7 @@
     FileName: deploy-jumpboxes.ps1
     This script deploys an ARM Template which creates a VM, Availablity Set, vNIC and Managed Data Disk
 .NOTES
-    AUTHOR(S): Microsoft Enterprise Services
+    AUTHOR(S): 
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 
