@@ -47,16 +47,16 @@
         },
         "configZipFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/2_dc2/configdc2.ps1.zip",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_CoreInfrastructure/6_compute/2_dc2/configdc2.ps1.zip",
             "metadata": {
                 "description": "The URL of configdc2.ps1.zip"
             }
         },
         "stgAcctName": {
             "type": "string",
-            "defaultValue": "MYPREFIXrece2sa01",
+            "defaultValue": "ALIASrece2sa01",
             "metadata": {
-                "description": "Name of the existing Storage Account in the MYPREfIX-Poc-Recovery-Rg"
+                "description": "Name of the existing Storage Account in the ALIAS-Poc-Recovery-Rg"
             }
         }
     },

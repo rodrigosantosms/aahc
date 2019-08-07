@@ -84,7 +84,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_MainTrack/5_compute/3_web/deploy-web-environment-nested.json",
+                    "uri": "https://raw.githubusercontent.com/rodrigosantosms/aahc/master/PoC/1_CoreInfrastructure/6_compute/3_web/deploy-web-environment-nested.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {

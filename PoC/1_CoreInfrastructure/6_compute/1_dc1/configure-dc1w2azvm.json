@@ -11,7 +11,7 @@
         },
         "configZipFileUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_MainTrack/5_compute/1_dc1/configdc1ps12.zip",
+            "defaultValue": "https://github.com/rodrigosantosms/aahc/raw/master/PoC/1_CoreInfrastructure/6_compute/1_dc1/configdc1ps12.zip",
             "metadata": {
                 "description": "The URL of configdc1ps12.zip"
             }
