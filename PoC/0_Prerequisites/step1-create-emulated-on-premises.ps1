@@ -50,7 +50,7 @@ $subnet2 = New-AzVirtualNetworkSubnetConfig -Name "jumpbox-sn" -AddressPrefix "1
 $subnet3 = New-AzVirtualNetworkSubnetConfig -Name "GatewaySubnet" -AddressPrefix "10.152.101.224/27"
 $onpremvnet = New-AzVirtualNetwork -Name $VnetName -ResourceGroupName $RgName -Location $location -AddressPrefix 10.152.101.0/24 -Subnet $subnet1, $subnet2, $subnet3
 
-# Create an inbound network security group rule for port 3389, and Create a network security group and associate with Jumpbox subnet Subnet
+# Create an inbound network security group rule for port 3389, and Create a network security group and associate with Jumpbox Subnet
 $NsgName = "jumpbox-sn-nsg"
 $nsgRuleRDP = New-AzNetworkSecurityRuleConfig -Name "Allow_RDP_In" -Protocol Tcp -Direction Inbound -Priority 1000 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * -DestinationPortRange 3389 -Access Allow
 $jumpboxNSG = New-AzNetworkSecurityGroup -ResourceGroupName $RgName -Location $location -Name $NsgName -SecurityRules $nsgRuleRDP

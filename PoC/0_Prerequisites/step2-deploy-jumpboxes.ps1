@@ -33,7 +33,7 @@ Param(
     
     [string] $RgName = 'emulated-on-premises-rg',
     [string] $vmSize = 'Standard_D2s_v3',
-    [int] $vmCount = 2,
+    [int] $vmCount = 12,
     [switch] $ValidateOnly
 )
 
