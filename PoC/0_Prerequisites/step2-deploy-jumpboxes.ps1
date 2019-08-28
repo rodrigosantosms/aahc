@@ -11,47 +11,49 @@
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 .DESCRIPTION
-    FileName: deploy-jumpboxes.ps1
-    This script deploys an ARM Template which creates a VM, Availablity Set, vNIC and Managed Data Disk
+    FileName: step2-deploy-jumpboxes.ps1
+    This script deploys an ARM Template which creates a VM, vNIC and Managed Data Disk
+    The VMs will use the following image by default - you can update that in the related ARM Template:
+        "publisher": "MicrosoftWindowsDesktop","offer": "Windows-10","sku": "19h1-pro","version": "latest"
 .NOTES
     AUTHOR(S): 
     KEYWORDS: Azure Deploy, PoC, Deployment
 #>
 
 # IMPORTANT: Change the value of the following parameters if needed:
-#    RgName        <-- This is the Resource Group Name created to host Hub West2 Resources
-#    RgLocation    <-- This is the location of Hub WestUS2 Resource Group (Default is WestUS2)
-#    ARMTemplate  <-- This is the path of the ARM Template will be used to deploy the Hub Resources
-#    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Hub Resources
+#    RgName              <-- This is the Resource Group for your Emulated-On-Premises resources
+#    vmSize              <-- Select a VM Size available in YOUR Azure Subscription. Make sure you have vCPUs enough already enabled, if not, open an Azure Support Ticket requesting more CPUs
+#    vmCount <-- Number of Jumpbox VMs to be created
 #
 # Example of how to run this script:
-# .\deploy-jumpboxes.ps1 -RgName "emulated-on-premises-rg" -vmName "jumpbox" -vmSize "Standard_D2s_v3" -existingVnetName "EMULATED-ONPREM-NETWORK" -existingSubnetName "Jumpbox-sn"
+# .\step2-deploy-jumpboxes.ps1 -RgName "emulated-on-premises-rg" -vmSize "Standard_D2s_v3" -vmCount 12
 
 ### Update the parameters below or provide the values when running the script
 Param(
     
-    [string] $RgName,
-    [string] $vmName,
-    [string] $vmSize,
-    [string] $existingVnetName,
-    [string] $existingSubnetName,
-    [switch] $UploadArtifacts,
-    [string] $ARMTemplate = 'deploy-jumpboxes.json',
-    [string] $ArtifactStagingDirectory = '.',
-    [string] $DeploymentName = 'Deploy-' + (((Get-Date).ToUniversalTime()).ToString('MMddyyyy-HHmm')),
+    [string] $RgName = 'emulated-on-premises-rg',
+    [string] $vmSize = 'Standard_D2s_v3',
+    [int] $vmCount = 12,
     [switch] $ValidateOnly
 )
-
 
 # Get credentials for VMs
 $adminUserName = "localadmin"
 $adminCred = Get-Credential -UserName $adminUserName -Message "Enter password for user: $adminUserName"
 $adminPassword = $adminCred.GetNetworkCredential().password
 
+# Define variables (do not change)
+$vmName = 'jumpbox'
+$existingVnetName = 'emulated-on-premises-vnet'
+$existingSubnetName = 'jumpbox-sn'
+$ARMTemplate = 'step2-deploy-jumpboxes.json'
+$DeploymentName = 'Deploy-' + (((Get-Date).ToUniversalTime()).ToString('MMddyyyy-HHmm'))
+
 # Create parameter hashtable for passing directly to main ARM template
 $ARMTemplateParam = @{}
 $ARMTemplateParam.Add("vmName",$vmName)
 $ARMTemplateParam.Add("vmSize",$vmSize)
+$ARMTemplateParam.Add("vmCount",$vmCount)
 $ARMTemplateParam.Add("existingVnetName",$existingVnetName)
 $ARMTemplateParam.Add("existingSubnetName",$existingSubnetName)
 $ARMTemplateParam.Add("adminUserName", $adminUserName)

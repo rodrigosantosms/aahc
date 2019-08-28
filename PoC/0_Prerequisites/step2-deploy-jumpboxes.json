@@ -21,7 +21,7 @@
                 "description": "Name of the virtual machine to be created"
             }
         },
-        "virtualMachineCount": {
+        "vmCount": {
             "type": "int",
             "defaultValue": 12,
             "metadata": {
@@ -30,30 +30,21 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_DS3_v2",
+            "defaultValue": "Standard_D2s_v3",
             "metadata": {
                 "description": "Virtual Machine Size"
             }
         },
-        "dnsPrefixForPublicIP": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 14,
-            "defaultValue": "[uniqueString(resourceGroup().id)]",
-            "metadata": {
-                "description": "Globally unique DNS prefix for the Public IPs used to access the Virtual Machines"
-            }
-        },
         "existingVnetName": {
             "type": "string",
-            "defaultValue": "EMULATED-ONPREM-NETWORK",
+            "defaultValue": "emulated-on-premises-vnet",
             "metadata": {
                 "description": "Name of the existing virtual network to deploy the VM"
             }
         },
         "existingSubnetName": {
             "type": "string",
-            "defaultValue": "Jumpbox-sn",
+            "defaultValue": "jumpbox-sn",
             "metadata": {
                 "description": "Name of the existing subnet to deploy the VM"
             }
@@ -62,13 +53,12 @@
     "variables": {
         "location": "[resourceGroup().location]",
         "osType": {
-            "publisher": "MicrosoftVisualStudio",
-            "offer": "VisualStudio",
-            "sku": "VS-2017-Comm-Latest-Win10-N",
+            "publisher": "MicrosoftWindowsDesktop",
+            "offer": "Windows-10",
+            "sku": "19h1-pro",
             "version": "latest"
         },
-        "imageReference": "[variables('osType')]",
-        "diagnosticStorageAccountName": "[concat('diagst', uniqueString(resourceGroup().id))]"
+        "imageReference": "[variables('osType')]"
     },
     "resources": [
         {
@@ -78,16 +68,13 @@
             "location": "[variables('location')]",
             "copy": {
                 "name": "pipCopy",
-                "count": "[parameters('virtualMachineCount')]"
+                "count": "[parameters('vmCount')]"
             },
             "tags": {
                 "displayName": "[concat(parameters('vmName'), copyIndex(1), '-pip1')]"
             },
             "properties": {
-                "publicIPAllocationMethod": "Static",
-                "dnsSettings": {
-                    "domainNameLabel": "[concat(parameters('dnsPrefixForPublicIP'), copyIndex(1))]"
-                }
+                "publicIPAllocationMethod": "Static"
             }
         },
         {
@@ -97,7 +84,7 @@
             "location": "[variables('location')]",
             "copy": {
                 "name": "nicCopy",
-                "count": "[parameters('virtualMachineCount')]"
+                "count": "[parameters('vmCount')]"
             },
             "properties": {
                 "ipConfigurations": [
@@ -122,21 +109,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
             ]
-        },
-        {
-            "name": "[variables('diagnosticStorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "location": "[variables('location')]",
-            "apiVersion": "2016-01-01",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "dependsOn": [],
-            "tags": {
-                "displayName": "diagnosticStorageAccount"
-            },
-            "kind": "Storage"
-        },
+        }
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(parameters('vmName'), copyIndex(1))]",
@@ -144,7 +117,7 @@
             "location": "[variables('location')]",
             "copy": {
                 "name": "VMcopy",
-                "count": "[parameters('virtualMachineCount')]"
+                "count": "[parameters('vmCount')]"
             },
             "properties": {
                 "hardwareProfile": {
@@ -178,16 +151,9 @@
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
                         }
                     ]
-                },
-                "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticStorageAccountName')), '2016-01-01').primaryEndpoints.blob]"
-                    }
                 }
             },
             "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', variables('diagnosticStorageAccountName'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
             ]
         }
