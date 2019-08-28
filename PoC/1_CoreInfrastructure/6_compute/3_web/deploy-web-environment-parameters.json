@@ -21,7 +21,7 @@
             "value": "web-west2-vnet"
         },
         "existingSubnetName": {
-            "value": "web-sn"
+            "value": "web-west2-sn"
         },
         "adminUsername": {
             "value": "localadmin"

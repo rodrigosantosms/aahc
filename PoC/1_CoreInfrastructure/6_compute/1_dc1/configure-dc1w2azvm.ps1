@@ -19,8 +19,8 @@
 #>
 
 # IMPORTANT: Change the value of the following parameters if needed:
-#    RgName        <-- This is the Resource Group Name created to host Hub West2 Resources
-#    RgLocation    <-- This is the location of Hub WestUS2 Resource Group (Default is WestUS2)
+#    RgName       <-- Resource Group Name created to host Hub West2 Resources
+#    vmName       <-- VM Name
 #    ARMTemplate  <-- This is the path of the ARM Template will be used to deploy the Hub Resources
 #    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Hub Resources
 #

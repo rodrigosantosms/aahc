@@ -28,7 +28,7 @@
 ### Update the parameters below or provide the values when calling the script
 Param(
     
-    [string] $RgName = 'MYPREFIX-poc-recovery-rg',
+    [string] $RgName = 'ALIAS-poc-recovery-rg',
     [string] $RgLocation = 'eastus2',
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'recovery-vnet-nsg.json',

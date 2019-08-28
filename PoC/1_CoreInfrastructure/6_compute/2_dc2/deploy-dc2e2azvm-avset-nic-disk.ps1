@@ -19,13 +19,17 @@
 #>
 
 # IMPORTANT: Change the value of the following parameters if needed:
-#    RgName        <-- This is the Resource Group Name created to host Hub West2 Resources
-#    RgLocation    <-- This is the location of Hub WestUS2 Resource Group (Default is WestUS2)
+#    RgName              <-- This is the Resource Group Name created to host Hub West2 Resources
+#    vmName              <-- VM Name
+#    vmSize              <-- VM Size (make sure to select an available size supporting Premium Disk)
+#    existingVnetName    <-- The Name of your "alias-Recovery-East2-vnet"
+#    existingSubnetName  <-- Default is adds-east2-sn
+#    stgAcctName         <-- Storage Account Name in the Recovery-East2-rg
 #    ARMTemplate  <-- This is the path of the ARM Template will be used to deploy the Hub Resources
 #    ARMTemplateParam <-- This is the path of the Parameters file used by the ARM Template to deploy the Hub Resources
 #
 # Example of how to run this script:
-# .\deploy-dc2e2azvm-avset-nic-disk.ps1 -RgName "poc-recovery-rg" -vmName "dc2e2azvm" -vmSize "Standard_D2s_v3" -existingVnetName "recovery-east2-vnet" -existingSubnetName "adds-east2-sn" -stgAcctName "aahcrece2sa01"
+# .\deploy-dc2e2azvm-avset-nic-disk.ps1 -RgName "poc-recovery-rg" -vmName "dc2e2azvm" -vmSize "Standard_D2s_v3" -existingVnetName "recovery-east2-vnet" -existingSubnetName "adds-east2-sn" -stgAcctName "aliasrece2sa01"
 
 ### Update the parameters below or provide the values when running the script
 Param(

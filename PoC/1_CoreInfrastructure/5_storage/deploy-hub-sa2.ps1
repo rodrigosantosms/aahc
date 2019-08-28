@@ -27,7 +27,7 @@
 ### Update the parameters below or provide the values when calling the script
 Param(
     
-    [string] $RgName = 'MYPREFIX-poc-hub-rg',
+    [string] $RgName = 'ALIAS-poc-hub-rg',
     [string] $RgLocation = 'westus2',
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'hub-sa2.json',

@@ -28,7 +28,7 @@
 ### Update the parameters below or provide the values when calling the script
 Param(
     
-    [string] $RgName = 'MYPREFIX-poc-web-rg',
+    [string] $RgName = 'ALIAS-poc-web-rg',
     [string] $RgLocation = 'westus2',
     [switch] $UploadArtifacts,
     [string] $ARMTemplate = 'web-vnet-nsg.json',

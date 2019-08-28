@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "prefix": {
-            "value": "aahc"
+            "value": "alias"
         },
         "storageAccountName": {
             "value": "rece2sa01"
