@@ -48,12 +48,15 @@ $VnetName = "emulated-on-premises-vnet"
 $subnet1 = New-AzVirtualNetworkSubnetConfig -Name "adds-svc-sn" -AddressPrefix "10.152.101.0/27"
 $subnet2 = New-AzVirtualNetworkSubnetConfig -Name "jumpbox-sn" -AddressPrefix "10.152.101.32/27"
 $subnet3 = New-AzVirtualNetworkSubnetConfig -Name "GatewaySubnet" -AddressPrefix "10.152.101.224/27"
-New-AzVirtualNetwork -Name $VnetName -ResourceGroupName $RgName -Location $location -AddressPrefix 10.152.101.0/24 -Subnet $subnet1, $subnet2, $subnet3
+$onpremvnet = New-AzVirtualNetwork -Name $VnetName -ResourceGroupName $RgName -Location $location -AddressPrefix 10.152.101.0/24 -Subnet $subnet1, $subnet2, $subnet3
 
-# Create an inbound network security group rule for port 3389, and Create a network security group
+# Create an inbound network security group rule for port 3389, and Create a network security group and associate with Jumpbox subnet Subnet
 $NsgName = "jumpbox-sn-nsg"
 $nsgRuleRDP = New-AzNetworkSecurityRuleConfig -Name "Allow_RDP_In" -Protocol Tcp -Direction Inbound -Priority 1000 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * -DestinationPortRange 3389 -Access Allow
-New-AzNetworkSecurityGroup -ResourceGroupName $RgName -Location $location -Name $NsgName -SecurityRules $nsgRuleRDP
+$jumpboxNSG = New-AzNetworkSecurityGroup -ResourceGroupName $RgName -Location $location -Name $NsgName -SecurityRules $nsgRuleRDP
+Set-AzVirtualNetworkSubnetConfig -VirtualNetwork $onpremvnet -Name $subnet2.Name -AddressPrefix $subnet2.AddressPrefix -NetworkSecurityGroup $jumpboxNSG
+Set-AzVirtualNetwork -VirtualNetwork $onpremvnet
+
 
 # Create Multiple Local Network Gateways (One for each attendee)
 $numlng=$NumberOfAttendees+100
