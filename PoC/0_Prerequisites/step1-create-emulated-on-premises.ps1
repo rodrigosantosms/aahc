@@ -56,8 +56,8 @@ $nsgRuleRDP = New-AzNetworkSecurityRuleConfig -Name "Allow_RDP_In" -Protocol Tcp
 New-AzNetworkSecurityGroup -ResourceGroupName $RgName -Location $location -Name $NsgName -SecurityRules $nsgRuleRDP
 
 # Create Multiple Local Network Gateways (One for each attendee)
-$NumberOfAttendees=$NumberOfAttendees+100
-for ($i=101; $i -le $NumberOfAttendees; $i++ ){
+$numlng=$NumberOfAttendees+100
+for ($i=101; $i -le $numlng; $i++ ){
         New-AzLocalNetworkGateway -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -GatewayIpAddress "$i.0.0.0" -AddressPrefix "10.$i.0.0/22"
 }
 
@@ -71,8 +71,8 @@ New-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName -Location 
 
 # Create Multiple Connections (One for each attendee)
 $vngop = Get-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName
-$NumberOfAttendees=$NumberOfAttendees+100
-for ($i=101; $i -le $NumberOfAttendees; $i++ ){
+$numconn=$NumberOfAttendees+100
+for ($i=101; $i -le $numconn; $i++ ){
         $lng = Get-AzLocalNetworkGateway   -Name "attendee-$i-lng" -ResourceGroupName $RgName
         New-AzVirtualNetworkGatewayConnection -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -VirtualNetworkGateway1 $vngop -LocalNetworkGateway2 $lng -ConnectionType IPsec -RoutingWeight 10 -SharedKey $sharedkey
 }

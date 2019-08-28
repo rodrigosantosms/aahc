@@ -109,7 +109,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
             ]
-        }
+        },
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(parameters('vmName'), copyIndex(1))]",
