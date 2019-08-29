@@ -12,7 +12,7 @@
     SOFTWARE
 .DESCRIPTION
     FileName: step2-deploy-jumpboxes.ps1
-    This script deploys an ARM Template which creates a VM, vNIC and Managed Data Disk
+    This script deploys an ARM Template which creates a VM, vNIC, Managed Data Disk and sets the auto shutdown policy.
     The VMs will use the following image by default - you can update that in the related ARM Template:
         "publisher": "MicrosoftWindowsDesktop","offer": "Windows-10","sku": "19h1-pro","version": "latest"
 .NOTES
@@ -23,10 +23,12 @@
 # IMPORTANT: Change the value of the following parameters if needed:
 #    RgName              <-- This is the Resource Group for your Emulated-On-Premises resources
 #    vmSize              <-- Select a VM Size available in YOUR Azure Subscription. Make sure you have vCPUs enough already enabled, if not, open an Azure Support Ticket requesting more CPUs
-#    vmCount <-- Number of Jumpbox VMs to be created
+#    vmCount             <-- Number of Jumpbox VMs to be created
+#    vmShutDownTime      <-- Military time you want the machine to be shutdown
+#    vmShutDownTimeZone  <-- Timezone name for the machine to be shutdown, this needs to be the text based name.
 #
 # Example of how to run this script:
-# .\step2-deploy-jumpboxes.ps1 -RgName "emulated-on-premises-rg" -vmSize "Standard_D2s_v3" -vmCount 12
+# .\step2-deploy-jumpboxes.ps1 -RgName "emulated-on-premises-rg" -vmSize "Standard_D2s_v3" -vmCount 12 -vmShutDownTime "1830" -vmShutDownTimeZone "Pacific Standard Time"
 
 ### Update the parameters below or provide the values when running the script
 Param(
@@ -34,7 +36,9 @@ Param(
     [string] $RgName = 'emulated-on-premises-rg',
     [string] $vmSize = 'Standard_D2s_v3',
     [int] $vmCount = 12,
-    [switch] $ValidateOnly
+    [switch] $ValidateOnly,
+    [string] $vmShutDownTime = '1830',
+    [string] $vmShutDownTimeZone = 'Pacific Standard Time'
 )
 
 # Get credentials for VMs
@@ -50,21 +54,23 @@ $ARMTemplate = 'step2-deploy-jumpboxes.json'
 $DeploymentName = 'Deploy-' + (((Get-Date).ToUniversalTime()).ToString('MMddyyyy-HHmm'))
 
 # Create parameter hashtable for passing directly to main ARM template
-$ARMTemplateParam = @{}
-$ARMTemplateParam.Add("vmName",$vmName)
-$ARMTemplateParam.Add("vmSize",$vmSize)
-$ARMTemplateParam.Add("vmCount",$vmCount)
-$ARMTemplateParam.Add("existingVnetName",$existingVnetName)
-$ARMTemplateParam.Add("existingSubnetName",$existingSubnetName)
+$ARMTemplateParam = @{ }
 $ARMTemplateParam.Add("adminUserName", $adminUserName)
 $ARMTemplateParam.Add("adminPassword", $adminPassword)
+$ARMTemplateParam.Add("vmName", $vmName)
+$ARMTemplateParam.Add("vmCount", $vmCount)
+$ARMTemplateParam.Add("vmSize", $vmSize)
+$ARMTemplateParam.Add("existingVnetName", $existingVnetName)
+$ARMTemplateParam.Add("existingSubnetName", $existingSubnetName)
+$ARMTemplateParam.Add("vmShutDownTime", $vmShutDownTime)
+$ARMTemplateParam.Add("vmShutDownTimeZone", $vmShutDownTimeZone)
 
 
 if ($ValidateOnly) {
     $ErrorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment -Mode Incremental -ResourceGroupName $RgName `
-                                                                                  -TemplateFile $ARMTemplate `
-                                                                                  -TemplateParameterObject $ARMTemplateParam `
-                                                                                  @OptionalParameters)
+            -TemplateFile $ARMTemplate `
+            -TemplateParameterObject $ARMTemplateParam `
+            @OptionalParameters)
     if ($ErrorMessages) {
         Write-Output '', 'Validation returned the following errors:', @($ErrorMessages), '', 'Template is invalid.'
     }

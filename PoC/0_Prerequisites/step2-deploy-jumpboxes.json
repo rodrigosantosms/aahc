@@ -48,6 +48,20 @@
             "metadata": {
                 "description": "Name of the existing subnet to deploy the VM"
             }
+        },
+        "vmShutDownTime": {
+            "defaultValue": "1830",
+            "type": "string",
+            "metadata": {
+                "description": "Time machine should shutdown"
+            }
+        },
+        "vmShutDownTimeZone": {
+            "defaultValue": "Pacific Standard Time",
+            "type": "string",
+            "metadata": {
+                "description": "Timezone to set shutdown policy"
+            }
         }
     },
     "variables": {
@@ -60,8 +74,7 @@
         },
         "imageReference": "[variables('osType')]"
     },
-    "resources": [
-        {
+    "resources": [{
             "apiVersion": "2016-03-30",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[concat(parameters('vmName'), copyIndex(1), '-pip1')]",
@@ -87,20 +100,18 @@
                 "count": "[parameters('vmCount')]"
             },
             "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
-                            },
-                            "subnet": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubNetName'))]"
-                            }
+                "ipConfigurations": [{
+                    "name": "ipconfig1",
+                    "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
+                        },
+                        "subnet": {
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubNetName'))]"
                         }
                     }
-                ],
+                }],
                 "dnsSettings": {
                     "dnsServers": []
                 },
@@ -146,16 +157,40 @@
                     "allowExtensionOperations": true
                 },
                 "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
-                        }
-                    ]
+                    "networkInterfaces": [{
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
+                    }]
                 }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
             ]
+        },
+        {
+            "apiVersion": "2016-05-15",
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "[concat('shutdown-computevm-',parameters('vmName'),copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "VMShutdownSchedulecopy",
+                "count": "[parameters('vmCount')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('vmName'),copyIndex(1)))]"
+            ],
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "[parameters('vmShutDownTime')]"
+                },
+                "timeZoneId": "[parameters('vmShutDownTimeZone')]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 15
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('vmName'),copyIndex(1)))]"
+            }
         }
     ],
     "outputs": {}
