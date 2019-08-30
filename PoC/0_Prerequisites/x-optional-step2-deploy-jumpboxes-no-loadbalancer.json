@@ -65,14 +65,6 @@
         }
     },
     "variables": {
-        "availabilitySetName": "[concat(parameters('vmName'), '-avset')]",
-        "publicIPAddressName": "[concat(parameters('vmName'), '-lb-pip')]",
-        "loadBalancerName": "[concat(parameters('vmName'), '-lb')]",
-        "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-        "lbID": "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]",
-        "bePoolName": "[concat(parameters('vmName'), '-bepool')]",
-        "frontEndIPConfigID": "[concat(variables('lbID'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubnetName'))]",
         "location": "[resourceGroup().location]",
         "osType": {
             "publisher": "MicrosoftWindowsDesktop",
@@ -80,131 +72,65 @@
             "sku": "19h1-pro",
             "version": "latest"
         },
-        "imageReference": "[variables('osType')]",
-        "computeApiVersion": "2018-10-01",
-        "networkApiVersion": "2018-10-01"
+        "imageReference": "[variables('osType')]"
     },
     "resources": [{
-            "name": "[variables('availabilitySetName')]",
-            "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "[variables('computeApiVersion')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "platformFaultDomainCount": 2,
-                "platformUpdateDomainCount": 2
-            },
-            "sku": {
-                "name": "Aligned"
-            }
-        },
-        {
-            "name": "[variables('publicIPAddressName')]",
+            "apiVersion": "2016-03-30",
             "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "[variables('networkApiVersion')]",
+            "name": "[concat(parameters('vmName'), copyIndex(1), '-pip1')]",
             "location": "[variables('location')]",
+            "copy": {
+                "name": "pipCopy",
+                "count": "[parameters('vmCount')]"
+            },
+            "tags": {
+                "displayName": "[concat(parameters('vmName'), copyIndex(1), '-pip1')]"
+            },
             "properties": {
                 "publicIPAllocationMethod": "Static"
             }
         },
         {
-            "name": "[variables('loadBalancerName')]",
-            "type": "Microsoft.Network/loadBalancers",
-            "apiVersion": "[variables('networkApiVersion')]",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "Basic"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
-            ],
-            "properties": {
-                "frontendIPConfigurations": [{
-                    "name": "LoadBalancerFrontEnd",
-                    "properties": {
-                        "publicIPAddress": {
-                            "id": "[variables('publicIPAddressID')]"
-                        }
-                    }
-                }],
-                "backendAddressPools": [{
-                    "name": "[variables('bePoolName')]"
-                }]
-            }
-        },
-        {
-            "name": "[concat(variables('loadBalancerName'), '/', 'rdp-jumpbox', copyIndex(1))]",
-            "type": "Microsoft.Network/loadBalancers/inboundNatRules",
-            "apiVersion": "[variables('networkApiVersion')]",
-            "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "lbNatLoop",
-                "count": "[parameters('vmCount')]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
-            ],
-            "properties": {
-                "frontendIPConfiguration": {
-                    "id": "[variables('frontEndIPConfigID')]"
-                },
-                "protocol": "Tcp",
-                "frontendPort": "[copyIndex(5001)]",
-                "backendPort": 3389,
-                "enableFloatingIP": false
-            }
-        },
-        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'), copyIndex(1), '-nic1')]",
-            "apiVersion": "[variables('networkApiVersion')]",
+            "apiVersion": "2018-02-01",
             "location": "[variables('location')]",
             "copy": {
                 "name": "nicCopy",
                 "count": "[parameters('vmCount')]"
             },
-            "dependsOn": [
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatRules/', 'rdp-jumpbox', copyIndex(1))]"
-            ],
             "properties": {
                 "ipConfigurations": [{
                     "name": "ipconfig1",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                            "id": "[variables('subnetRef')]"
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
                         },
-                        "loadBalancerBackendAddressPools": [{
-                            "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), variables('bePoolName'))]"
-                        }],
-                        "loadBalancerInboundNatRules": [{
-                            "id": "[concat(variables('lbID'),'/inboundNatRules/rdp-jumpbox', copyindex(1))]"
-                        }]
+                        "subnet": {
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubNetName'))]"
+                        }
                     }
                 }],
                 "dnsSettings": {
                     "dnsServers": []
                 },
                 "enableIPForwarding": false
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmName'), copyIndex(1), '-pip1'))]"
+            ]
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(parameters('vmName'), copyIndex(1))]",
-            "apiVersion": "[variables('computeApiVersion')]",
+            "apiVersion": "2018-06-01",
             "location": "[variables('location')]",
             "copy": {
                 "name": "VMcopy",
                 "count": "[parameters('vmCount')]"
             },
-            "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('vmName'), copyIndex(1), '-nic1')]",
-                "[concat('Microsoft.Compute/AvailabilitySets/', variables('availabilitySetName'))]"
-            ],
             "properties": {
-                "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
-                },
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
@@ -235,12 +161,15 @@
                         "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
                     }]
                 }
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), copyIndex(1), '-nic1'))]"
+            ]
         },
         {
-            "name": "[concat('shutdown-computevm-',parameters('vmName'),copyIndex(1))]",
-            "type": "Microsoft.DevTestLab/schedules",
             "apiVersion": "2016-05-15",
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "[concat('shutdown-computevm-',parameters('vmName'),copyIndex(1))]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "VMShutdownSchedulecopy",
