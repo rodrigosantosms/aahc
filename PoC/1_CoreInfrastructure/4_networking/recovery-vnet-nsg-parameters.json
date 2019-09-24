@@ -3,25 +3,25 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "recovery_east2_vnet_addressSpace": {
-            "value": "172.16.100.0/22",
+            "value": "172.16.200.0/22",
             "metadata": {
                 "description": "Recovery East2 Vnet Address Space"
             }
         },
         "adds_east2_subnet_addressrange": {
-            "value": "172.16.100.0/24",
+            "value": "172.16.200.0/24",
             "metadata": {
                 "description": "Adds East2 Subnet Address Range"
             }
         },
         "svc_east2_subnet_addressrange": {
-            "value": "172.16.101.0/24",
+            "value": "172.16.201.0/24",
             "metadata": {
                 "description": "Svc East2 Subnet Address Range"
             }
         },
         "GatewaySubnet_east2_subnet_addressrange": {
-            "value": "172.16.103.224/27",
+            "value": "172.16.203.224/27",
             "metadata": {
                 "description": "Gateway Subnet Address Range"
             }
