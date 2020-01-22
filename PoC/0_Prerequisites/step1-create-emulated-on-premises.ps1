@@ -35,7 +35,7 @@ Param(
     [string] $RgName = 'emulated-on-premises-rg',
     [string] $location = 'westus2',
     [string] $sharedkey = 'define-your-shared-key-123',
-    [Int] $NumberOfAttendees = 12
+    [Int] $NumberOfAttendees = 1
 )
 
 #---------------------------------------------------------------------------------------------------------------------------------------#
@@ -61,21 +61,21 @@ Set-AzVirtualNetwork -VirtualNetwork $onpremvnet
 # Create Multiple Local Network Gateways (One for each attendee)
 $numlng=$NumberOfAttendees+100
 for ($i=101; $i -le $numlng; $i++){
-        New-AzLocalNetworkGateway -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -GatewayIpAddress "$i.0.0.0" -AddressPrefix "10.$i.0.0/22"
+        #New-AzLocalNetworkGateway -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -GatewayIpAddress "$i.0.0.0" -AddressPrefix "10.$i.0.0/22"
 }
 
 # Create VPN Virtual Network Gateway (After running this command, it can take up to 45 minutes for the gateway configuration to complete)
-$vngname = "on-premfirewall-vng"
-$gwpip= New-AzPublicIpAddress -Name $vngname-pip -ResourceGroupName $RgName -Location $location -AllocationMethod Dynamic
-$vnet = Get-AzVirtualNetwork -Name $VnetName -ResourceGroupName $RgName
-$subnet = Get-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -VirtualNetwork $vnet
-$gwipconfig = New-AzVirtualNetworkGatewayIpConfig -Name gwipconfig1 -SubnetId $subnet.Id -PublicIpAddressId $gwpip.Id
-New-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName -Location $location -IpConfigurations $gwipconfig -GatewayType Vpn -VpnType RouteBased -GatewaySku VpnGw1
+#$vngname = "on-premfirewall-vng"
+#$gwpip= New-AzPublicIpAddress -Name $vngname-pip -ResourceGroupName $RgName -Location $location -AllocationMethod Dynamic
+#$vnet = Get-AzVirtualNetwork -Name $VnetName -ResourceGroupName $RgName
+#$subnet = Get-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -VirtualNetwork $vnet
+#$gwipconfig = New-AzVirtualNetworkGatewayIpConfig -Name gwipconfig1 -SubnetId $subnet.Id -PublicIpAddressId $gwpip.Id
+#New-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName -Location $location -IpConfigurations $gwipconfig -GatewayType Vpn -VpnType RouteBased -GatewaySku VpnGw1
 
 # Create Multiple Connections (One for each attendee)
-$vngop = Get-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName
-$numconn=$NumberOfAttendees+100
-for ($i=101; $i -le $numconn; $i++){
-        $lng = Get-AzLocalNetworkGateway   -Name "attendee-$i-lng" -ResourceGroupName $RgName
-        New-AzVirtualNetworkGatewayConnection -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -VirtualNetworkGateway1 $vngop -LocalNetworkGateway2 $lng -ConnectionType IPsec -RoutingWeight 10 -SharedKey $sharedkey
-}
+#$vngop = Get-AzVirtualNetworkGateway -Name $vngname -ResourceGroupName $RgName
+#$numconn=$NumberOfAttendees+100
+#for ($i=101; $i -le $numconn; $i++){
+ #       $lng = Get-AzLocalNetworkGateway   -Name "attendee-$i-lng" -ResourceGroupName $RgName
+        #New-AzVirtualNetworkGatewayConnection -Name "attendee-$i-lng" -ResourceGroupName $RgName -Location $location -VirtualNetworkGateway1 $vngop -LocalNetworkGateway2 $lng -ConnectionType IPsec -RoutingWeight 10 -SharedKey $sharedkey
+#}

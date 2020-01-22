@@ -35,9 +35,9 @@ Param(
     
     [string] $RgName = 'emulated-on-premises-rg',
     [string] $vmSize = 'Standard_D2s_v3',
-    [int] $vmCount = 12,
+    [int] $vmCount = 1,
     [switch] $ValidateOnly,
-    [string] $vmShutDownTime = '1830',
+    [string] $vmShutDownTime = '23:30',
     [string] $vmShutDownTimeZone = 'Pacific Standard Time'
 )
 
