@@ -9,7 +9,7 @@
             "value": 2
         },
         "vmSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_B2s"
         },
         "AzureSqlServerName": {
             "value": "aliassqlwebw2azsql01"
