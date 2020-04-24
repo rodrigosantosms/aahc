@@ -5,15 +5,16 @@ echo "--------------------------------------------------------" >> /tmp/install.
 echo "Phase 1 - Install dotnet core and Create Azure Database" >> /tmp/install.log
 cd /tmp
 sudo mkdir /opt/dotnet
-export PATH=$PATH:/opt/dotnet
-sudo apt-key adv --keyserver packages.microsoft.com --recv-keys EB3E94ADBE1229CF
-sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/dotnet
+sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+sudo curl -s "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52E16F86FEE04B979B07E28DB02C46DF417A0893" | sudo apt-key add -
+sudo curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list'
 sudo apt-get update
 sudo apt-get install -y apt-transport-https
-sudo apt-get update && sudo apt-get install -y libicu52 libcurl3 liblldb-3.6 libunwind8-dev libunwind >> /tmp/install.log
-sudo wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update && sudo apt-get install -y libicu52 libcurl3 liblldb-3.6 libunwind8-dev libunwind
 sudo apt-get install apt-transport-https
 sudo apt-get install -y dotnet-dev-1.1.11
 sudo wget -O /tmp/dotnet-dev-ubuntu-x64.1.1.11.tar.gz https://download.visualstudio.microsoft.com/download/pr/c0957a2b-cac6-44d8-b1cc-0dad4420c825/8dc69e33f8cf44152fdf173d3bf0b746/dotnet-dev-ubuntu-x64.1.1.11.tar.gz  --append-output=/tmp/install.log
